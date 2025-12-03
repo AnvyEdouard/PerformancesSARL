@@ -1,829 +1,495 @@
-// ----------------------------------------------------
-// 1. IMPORTS
-// ----------------------------------------------------
-import { useState, useEffect } from "react";
-import {
-  Container,
-  Row,
-  Col,
-  Card,
-  Button,
-  Navbar,
-  Nav,
-} from "react-bootstrap";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState, useEffect } from 'react';
+import { motion, useInView } from 'framer-motion';
+import { 
+  GraduationCap, Users, Calculator, Briefcase, Presentation, 
+  Handshake, FileBarChart, UserCheck, Quote, MapPin, Phone, 
+  Mail, Award, CheckCircle, Menu, ArrowRight, Check, Linkedin, 
+  Facebook, MessageCircle
+} from 'lucide-react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-// ----------------------------------------------------
-// 2. COMPOSANTS ANIMÉS
-// ----------------------------------------------------
-const MotionDiv = motion.div;
-const MotionCard = motion(Card as any);
+// Animation variants
+const fadeInUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.8 } }
+};
 
-// ----------------------------------------------------
-// 3. DONNÉES
-// ----------------------------------------------------
-const navItems = [
-  "Accueil",
-  "Formations",
-  "Assistances & Conseils",
-  "Etudes & Audits",
-  "Recrutements",
-  "A propros",
-  "Contacts",
-];
+const RevealOnScroll: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const ref = React.useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-150px" });
 
-const domains = [
-  {
-    icon: "🎓",
-    title: "Formations",
-    description:
-      "Catalogue complet de formations certifiées pour développer vos compétences.",
-  },
-  {
-    icon: "🏢",
-    title: "Assistances & Conseils",
-    description:
-      "Accompagnement stratégique pour transformer durablement vos organisations.",
-  },
-  {
-    icon: "📊",
-    title: "Études & Audits",
-    description: "Analyses approfondies, diagnostics RH et performance continue.",
-  },
-  {
-    icon: "👥",
-    title: "Recrutements",
-    description: "Programmes de coaching individualisés et coaching d'équipe.",
-  },
-];
+  return (
+    <motion.div
+      ref={ref}
+      initial="hidden"
+      animate={isInView ? "visible" : "hidden"}
+      variants={fadeInUp}
+    >
+      {children}
+    </motion.div>
+  );
+};
 
-const formations = [
-  {
-    category: "Management",
-    icon: "📊",
-    description: "Leadership, gestion d'équipe, stratégie d'entreprise",
-    count: "14 formations disponibles",
-    // CORRECTION : Ajout de la propriété 'items' qui était manquante pour le rendu
-    items: ["Gestion d'équipe", "Leadership Stratégique", "Prise de parole"],
-  },
-  {
-    category: "Finance & Comptabilité",
-    icon: "💰",
-    description: "Analyse financière, contrôle de gestion, audit",
-    count: "12 formations disponibles",
-    items: ["Analyse financière", "Contrôle de gestion", "Trésorerie"],
-  },
-  {
-    category: "Ressources Humaines",
-    icon: "👥",
-    description: "Recrutement, GPEC, paie, relations sociales",
-    count: "18 formations disponibles",
-    items: ["Recrutement", "Gestion de la Paie", "Droit social"],
-  },
-  {
-    category: "Marketing & Communication",
-    icon: "📢",
-    description: "Stratégie marketing, digital, communication",
-    count: "14 formations disponibles",
-    items: ["Marketing Digital", "Stratégie de Contenu", "Community Management"],
-  },
-  {
-    category: "Qualité & Sécurité",
-    icon: "✅",
-    description: "Normes ISO, HSE, management qualité",
-    count: "10 formations disponibles",
-    items: ["Norme ISO 9001", "HSE", "Audit Qualité"],
-  },
-  {
-    category: "Supply Chain",
-    icon: "🚚",
-    description: "Logistique, achats, gestion des stocks",
-    count: "11 formations disponibles",
-    items: ["Gestion des Achats", "Optimisation Logistique", "Gestion des Stocks"],
-  },
-];
+const HomePage: React.FC = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-// 📌 Données pour Solutions de Recrutement 
-const recrutementServices = [
-  {
-    title: "Chasseur de têtes",
-    icon: "🔍",
-    description: "Identification et approche de profils hautement qualifiés",
-  },
-  {
-    title: "Recrutement de masse",
-    icon: "👥",
-    description: "Campagnes de recrutement à grande échelle",
-  },
-  {
-    title: "Évaluation RH",
-    icon: "📋",
-    description: "Tests psychotechniques et assessment centers",
-  },
-];
-
-const assistancesServices = [
-  {
-    title: "Conseil en organisation",
-    description: "Optimisation des structures et processus",
-  },
-  {
-    title: "Assistance RH",
-    description: "GPEC, recrutement, formation, paie",
-  },
-  {
-    title: "Conseil stratégique",
-    description: "Élaboration de stratégie et développement",
-  },
-];
-
-const etudesServices = [
-  {
-    title: "Audits organisationnels",
-    description: "Évaluation complète de vos structures et processus",
-  },
-  {
-    title: "Études de marché",
-    description: "Analyses sectorielles et études de faisabilité",
-  },
-  {
-    title: "Diagnostics RH",
-    description: "Évaluation des pratiques et politiques RH",
-  },
-];
-
-const values = [
-  {
-    title: "Excellence",
-    description: "Nos standards et méthodes garantissent un niveau premium.",
-  },
-  {
-    title: "Impact réel",
-    description: "Chaque action doit créer de la valeur mesurable.",
-  },
-  {
-    title: "Innovation",
-    description: "Approches modernes, outils digitaux et expérimentation.",
-  },
-];
-
-const clients = [
-  { name: "UBA", logo: "U" },
-  { name: "Orange", logo: "O" },
-  { name: "SODECI", logo: "S" },
-  { name: "MTN", logo: "M" },
-  { name: "MOOV CI", logo: "M" },
-];
-
-// ----------------------------------------------------
-// 4. SECTIONS DE LA PAGE
-// ----------------------------------------------------
-
-// -------------------- HEADER ------------------------
-const Header = () => (
-  <Navbar
-    bg="white"
-    expand="lg"
-    fixed="top"
-    className="shadow-sm"
-    style={{ borderBottom: "1px solid #e0e0e0", zIndex: 1030 }} // Ajout de zIndex pour être sûr
-  >
-    <Container>
-      <Navbar.Brand href="#home" className="fw-bold">
-        Cabinet Performances
-      </Navbar.Brand>
-      <Navbar.Toggle aria-controls="basic-navbar-nav" />
-      <Navbar.Collapse id="basic-navbar-nav">
-        <Nav className="ms-auto">
-          {navItems.map((item) => (
-            <Nav.Link key={item} href={`#${item.toLowerCase().replace(/[^a-z0-9]/g, '-')}`} className="mx-2">
-              {item}
-            </Nav.Link>
-          ))}
-        </Nav>
-      </Navbar.Collapse>
-    </Container>
-  </Navbar>
-);
-
-// -------------------- HERO ------------------------
-const HeroSection = () => (
-  <section
-    id="accueil" // Ajout d'un ID pour la navigation
-    className="hero-section d-flex align-items-center text-white"
-    style={{
-      minHeight: "90vh",
-      background: "linear-gradient(to right, #000, #222)",
-      padding: "3rem 0",
-    }}
-  >
-    <Container>
-      <MotionDiv
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-      >
-        <h1 className="display-3 fw-bold mb-3">CABINET PERFORMANCES</h1>
-        <h5 className="mb-4" style={{ opacity: 0.8 }}>
-          Formations — Assistances & Conseils — Etudes & Audits — Recrutements
-        </h5>
-        <Button
-          variant="danger"
-          size="lg"
-          className="mt-3"
-          style={{ backgroundColor: "#FF5722", borderColor: "#FF5722" }}
-        >
-          Découvrir nos offres
-        </Button>
-      </MotionDiv>
-    </Container>
-  </section>
-);
-
-// -------------------- DOMAINES ------------------------
-const DomainesSection = () => (
-  <section className="py-5">
-    <Container>
-      <h2 className="fw-bold mb-4">Nos Domaines d'Expertises</h2>
-      <Row className="g-4">
-        {domains.map((item, index) => (
-          <Col xs={12} md={3} key={index}>
-            <MotionCard
-              whileHover={{ y: -10, boxShadow: "0 10px 30px rgba(0,0,0,0.15)" }}
-              transition={{ duration: 0.3 }}
-              className="h-100 text-center p-4 border-0 shadow-sm"
-              style={{ borderRadius: "15px" }}
-            >
-              <div style={{ fontSize: "3rem" }} className="mb-3">
-                {item.icon}
-              </div>
-              <Card.Title className="fw-bold">{item.title}</Card.Title>
-              <Card.Text className="text-muted small">
-                {item.description}
-              </Card.Text>
-            </MotionCard>
-          </Col>
-        ))}
-      </Row>
-    </Container>
-  </section>
-);
-
-// -------------------- CATALOGUE ------------------------
-const CatalogueSection = () => (
-  <section className="py-5" id="formations"> {/* Ajout d'un ID pour la navigation */}
-    <Container>
-      <h2 className="fw-bold mb-4 text-center">Catalogue de Formations</h2>
-      <Row className="g-4">
-        {formations.map((block, index) => (
-          <Col xs={12} md={6} lg={4} key={index}>
-            <MotionCard
-              whileHover={{ y: -8 }}
-              className="p-4 border-0 shadow-sm h-100"
-              style={{ borderRadius: "15px" }}
-            >
-              <Card.Body>
-                <div className="d-flex align-items-center mb-3">
-                    <div style={{ fontSize: "1.8rem" }} className="me-3">
-                        {block.icon}
-                    </div>
-                    <Card.Title className="fw-bold mb-0">
-                        {block.category}
-                    </Card.Title>
-                </div>
-
-                <p className="text-muted small mb-3">
-                    {block.description}
-                </p>
-
-                {/* CORRECTION CRITIQUE ICI : 'items' n'existait pas dans l'objet de données 'formations' original, mais était mappé ici. J'ai ajouté 'items' aux données de formations ci-dessus. */}
-                {block.items && block.items.map((item, i) => ( 
-                  <div key={i} className="d-flex align-items-center mb-2">
-                    <span className="text-success me-2">✓</span>
-                    <span className="small">{item}</span>
-                  </div>
-                ))}
-                
-              </Card.Body>
-              <Card.Footer className="bg-white border-0 pt-0">
-                    <p className="fw-bold text-danger mb-0 mt-3">{block.count}</p>
-              </Card.Footer>
-            </MotionCard>
-          </Col>
-        ))}
-      </Row>
-      <div className="text-center mt-5">
-          <Button
-            size="lg"
-            style={{ backgroundColor: "#FF5722", borderColor: "#FF5722" }}
-          >
-            Voir tout le catalogue (75+)
-          </Button>
-      </div>
-    </Container>
-  </section>
-);
-
-// -------------------- ASSISTANCES & CONSEILS ------------------------
-const AssistancesSection = () => (
-  <section
-    className="py-5 text-white"
-    style={{ backgroundColor: "#FF5722" }}
-    id="assistances-conseils" // Ajout d'un ID pour la navigation
-  >
-    <Container>
-      <Row className="align-items-center g-4">
-        {/* Colonne gauche : Contenu texte */}
-        <Col xs={12} md={6}>
-          <MotionDiv
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="fw-bold mb-4">Assistances & Conseils</h2>
-            <p className="mb-4" style={{ lineHeight: 1.8, opacity: 0.95 }}>
-              Nos consultants experts vous accompagnent dans vos projets
-              stratégiques et opérationnels pour améliorer la performance de
-              votre organisation.
-            </p>
-
-            {/* Liste des services */}
-            {assistancesServices.map((service, index) => (
-              <div key={index} className="d-flex mb-3">
-                <span className="me-3">✓</span>
-                <div>
-                  <h6 className="fw-bold mb-1">{service.title}</h6>
-                  <p className="mb-0 small" style={{ opacity: 0.9 }}>
-                    {service.description}
-                  </p>
-                </div>
-              </div>
-            ))}
-
-            <Button
-              variant="light"
-              className="mt-3"
-              style={{ color: "#FF5722" }}
-            >
-              Découvrir nos services →
-            </Button>
-          </MotionDiv>
-        </Col>
-
-        {/* Colonne droite : Image/Slide */}
-        <Col xs={12} md={6}>
-          <MotionDiv
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="d-flex align-items-center justify-content-center text-center p-5"
-            style={{
-              backgroundColor: "rgba(255, 255, 255, 0.1)",
-              backdropFilter: "blur(10px)",
-              borderRadius: "20px",
-              minHeight: "400px",
-              border: "2px solid rgba(255, 255, 255, 0.2)",
-            }}
-          >
-            <h4 style={{ fontStyle: "italic", opacity: 0.7 }}>
-              Un slide ou une image
-            </h4>
-          </MotionDiv>
-        </Col>
-      </Row>
-    </Container>
-  </section>
-);
-
-// -------------------- ÉTUDES & AUDITS ------------------------
-const EtudesSection = () => (
-  <section className="py-5 bg-white" id="etudes-audits"> {/* Ajout d'un ID pour la navigation */}
-    <Container>
-      <Row className="align-items-center g-4">
-        {/* Colonne gauche : Image/Slide */}
-        <Col xs={12} md={6}>
-          <MotionDiv
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="d-flex align-items-center justify-content-center text-center p-5"
-            style={{
-              backgroundColor: "#FFF3E0",
-              borderRadius: "20px",
-              minHeight: "400px",
-              border: "2px solid #FFE0B2",
-            }}
-          >
-            <h4
-              className="text-muted"
-              style={{ fontStyle: "italic", opacity: 0.7 }}
-            >
-              Un slide ou une image
-            </h4>
-          </MotionDiv>
-        </Col>
-
-        {/* Colonne droite : Contenu texte */}
-        <Col xs={12} md={6}>
-          <MotionDiv
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="fw-bold mb-4">Études & Audits</h2>
-            <p className="text-muted mb-4" style={{ lineHeight: 1.8 }}>
-              Des diagnostics approfondis et des études personnalisées pour
-              éclairer vos décisions stratégiques.
-            </p>
-
-            {/* Liste des services */}
-            {etudesServices.map((service, index) => (
-              <div key={index} className="d-flex mb-3">
-                <div
-                  className="d-flex align-items-center justify-content-center me-3"
-                  style={{
-                    backgroundColor: "#FFF3E0",
-                    borderRadius: "50%",
-                    width: "40px",
-                    height: "40px",
-                    minWidth: "40px",
-                  }}
-                >
-                  <span style={{ color: "#FF5722", fontSize: "1.2rem" }}>
-                    📊
-                  </span>
-                </div>
-                <div>
-                  <h6 className="fw-bold mb-1">{service.title}</h6>
-                  <p className="text-muted mb-0 small">{service.description}</p>
-                </div>
-              </div>
-            ))}
-
-            <Button
-              className="mt-3"
-              style={{
-                backgroundColor: "#FF5722",
-                borderColor: "#FF5722",
-              }}
-            >
-              En savoir plus →
-            </Button>
-          </MotionDiv>
-        </Col>
-      </Row>
-    </Container>
-  </section>
-);
-
-// -------------------- SOLUTIONS DE RECRUTEMENT ------------------------
-// ✅ NOUVELLE SECTION : Ajoutée entre "Études & Audits" et "À propos"
-const RecrutementSection = () => (
-  <section
-    className="py-5"
-    style={{
-      background: "linear-gradient(135deg, #FF5722 0%, #FF7043 100%)",
-      color: "white",
-    }}
-  >
-    <Container>
-      {/* Titre centré */}
-      <div className="text-center mb-5">
-        <h2 className="fw-bold mb-2">Solutions de recrutement</h2>
-        <p style={{ opacity: 0.95 }}>
-          Trouvez les meilleurs talents pour votre entreprise
-        </p>
-      </div>
-
-      {/* Grille des services */}
-      <Row className="g-4 mb-4">
-        {recrutementServices.map((service, index) => (
-          <Col xs={12} md={4} key={index}>
-            <MotionDiv
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-            >
-              <Card
-                className="h-100 border-0 shadow-lg text-center"
-                style={{
-                  borderRadius: "15px",
-                  backgroundColor: "rgba(255, 255, 255, 0.95)",
-                }}
-              >
-                <Card.Body className="p-4">
-                  {/* Icône circulaire */}
-                  <div
-                    className="d-flex align-items-center justify-content-center mx-auto mb-3"
-                    style={{
-                      width: "70px",
-                      height: "70px",
-                      backgroundColor: "#FFF3E0",
-                      borderRadius: "50%",
-                      fontSize: "2rem",
-                    }}
-                  >
-                    {service.icon}
-                  </div>
-
-                  {/* Titre */}
-                  <h5 className="fw-bold mb-2" style={{ color: "#333" }}>
-                    {service.title}
-                  </h5>
-
-                  {/* Description */}
-                  <p className="text-muted small mb-0">
-                    {service.description}
-                  </p>
-                </Card.Body>
-              </Card>
-            </MotionDiv>
-          </Col>
-        ))}
-      </Row>
-
-      {/* ✅ Bouton "Découvrir nos solutions" centré */}
-      <div className="text-center mt-4">
-        <Button
-          variant="light"
-          size="lg"
-          className="fw-bold"
-          style={{
-            color: "#FF5722",
-            padding: "12px 40px",
-            borderRadius: "8px",
-          }}
-        >
-          Découvrir nos solutions →
-        </Button>
-      </div>
-    </Container>
-  </section>
-);
-
-// -------------------- A PROPOS ------------------------
-const AProposSection = () => (
-  <section className="py-5">
-    <Container>
-      <Row className="g-4">
-        <Col xs={12} md={6}>
-          <h2 className="fw-bold mb-4">À propos du cabinet</h2>
-          <p className="text-muted mb-3">
-            Depuis plus de 15 ans, nous accompagnons entreprises, dirigeants et
-            équipes dans la transformation de leur performance.
-          </p>
-
-          {values.map((v, index) => (
-            <div key={index} className="d-flex mb-3">
-              <span className="text-primary me-3" style={{ fontSize: "1.5rem" }}>
-                ⭐
-              </span>
-              <div>
-                <h6 className="fw-bold mb-1">{v.title}</h6>
-                <p className="text-muted mb-0 small">{v.description}</p>
-              </div>
-            </div>
-          ))}
-          {/* 🚀 AJOUT DU BOUTON ICI */}
-          <Button
-            className="mt-4" // Marge supérieure pour séparer des valeurs
-            style={{
-              backgroundColor: "#FF5722", // Couleur de l'identité visuelle
-              borderColor: "#FF5722",
-            }}
-            // Vous pouvez ajouter un lien vers une page dédiée si elle existe
-            onClick={() => console.log("Clic sur Qui sommes-nous ?")} 
-          >
-            Qui sommes-nous ? →
-          </Button>
-          {/* 🚀 FIN DE L'AJOUT */}
-        </Col>
-
-        <Col xs={12} md={6}>
-          <MotionDiv
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7 }}
-            style={{
-              height: "350px",
-              borderRadius: "20px",
-              backgroundImage:
-                "url('https://images.unsplash.com/photo-1551836022-d5d88e9218df')",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
-          />
-        </Col>
-      </Row>
-    </Container>
-  </section>
-);
-
-// -------------------- CLIENTS ------------------------
-const ClientsSection = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const itemsPerView = 5;
+  const heroImages = [
+    'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80',
+    'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80',
+    'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80'
+  ];
 
   useEffect(() => {
     const interval = setInterval(() => {
-      // Le calcul de l'index doit être basé sur le nombre total d'éléments, non sur la vue
-      setCurrentIndex((prev) => (prev + 1) % clients.length); 
-    }, 3000);
-
+      setCurrentSlide((prev) => (prev + 1) % heroImages.length);
+    }, 5000);
     return () => clearInterval(interval);
   }, []);
 
-  const getVisibleClients = () => {
-    const visible = [];
-    for (let i = 0; i < itemsPerView; i++) {
-      visible.push(clients[(currentIndex + i) % clients.length]);
+  const domains = [
+    {
+      icon: <GraduationCap size={24} />,
+      title: 'Formations Professionelles',
+      description: 'Développement des compétences et renforcement des capacités pour vos équipes.'
+    },
+    {
+      icon: <Users size={24} />,
+      title: 'Ressources Humaines',
+      description: 'Gestion prévisionnelle, administration du personnel et conformité légale.'
+    },
+    {
+      icon: <Calculator size={24} />,
+      title: 'Comptabilité & Gestion',
+      description: 'Tenue comptable, états financiers et contrôle de gestion rigoureux.'
+    },
+    {
+      icon: <Briefcase size={24} />,
+      title: 'Recrutement',
+      description: 'Chasse de tête et placement de cadres supérieurs et opérationnels.'
     }
-    return visible;
-  };
+  ];
+
+  const services = [
+    {
+      icon: <Presentation size={20} />,
+      title: 'Formations Professionnelles',
+      description: 'Des programmes sur mesure adaptés aux besoins spécifiques des entreprises et administrations. Nous utilisons des méthodes pédagogiques actives pour garantir la montée en compétence de vos collaborateurs.',
+      features: ['Management & Leadership', 'Techniques de vente', 'Bureautique & Digital'],
+      image: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80',
+      imageRight: false
+    },
+    {
+      icon: <Handshake size={20} />,
+      title: 'Assistances & Conseils',
+      description: 'Accompagnement stratégique et opérationnel pour améliorer la performance globale et l\'organisation interne de votre structure. Nous agissons comme des partenaires de votre croissance.',
+      image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80',
+      imageRight: true
+    },
+    {
+      icon: <FileBarChart size={20} />,
+      title: 'Études & Audits',
+      description: 'Diagnostics approfondis, audits organisationnels et audits comptables pour sécuriser vos processus et garantir la fiabilité de vos informations financières.',
+      image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80',
+      imageRight: false
+    },
+    {
+      icon: <UserCheck size={20} />,
+      title: 'Recrutements & Placements',
+      description: 'Sourcing rigoureux, sélection, tests psychotechniques, entretiens et placement de profils qualifiés. Nous trouvons les talents qui partagent vos valeurs.',
+      image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80',
+      imageRight: true
+    }
+  ];
+
+  const team = [
+    { name: 'Jean-Marc Koffi', role: 'Directeur Général', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80' },
+    { name: 'Aminata Diallo', role: 'Responsable Formation', image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80' },
+    { name: 'Stéphane Kouassi', role: 'Expert Audit', image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80' },
+    { name: 'Sarah N\'Diaye', role: 'Consultante RH', image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80' }
+  ];
+
+  const testimonials = [
+    {
+      quote: "Le Cabinet Performances a su identifier nos besoins en formation avec une précision remarquable. Nos équipes sont plus performantes.",
+      author: "Directeur Administratif",
+      company: "Grande Pharmacie Abidjan",
+      initials: "DA"
+    },
+    {
+      quote: "Un accompagnement comptable rigoureux qui nous a permis de structurer notre croissance. Je recommande vivement leurs services.",
+      author: "Directeur Général",
+      company: "PME Agroalimentaire",
+      initials: "DG"
+    },
+    {
+      quote: "Grâce à leur service de recrutement, nous avons trouvé notre Directeur Technique en un temps record. Professionnalisme exemplaire.",
+      author: "Responsable RH",
+      company: "Groupe BTP",
+      initials: "RRH"
+    }
+  ];
 
   return (
-    <section className="py-5" style={{ backgroundColor: "#f9f9f9" }}>
-      <Container>
-        <h2 className="fw-bold text-center mb-5">Ils nous font confiance</h2>
+    <div style={{ backgroundColor: '#FAFAFA', color: '#2F475E', fontFamily: 'Inter, sans-serif' }}>
+      {/* Header */}
+      <motion.header 
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        className="fixed-top bg-white shadow-sm"
+        style={{ backdropFilter: 'blur(10px)', backgroundColor: 'rgba(255, 255, 255, 0.95)', zIndex: 1000 }}
+      >
+        <div className="container">
+          <nav className="navbar navbar-expand-lg navbar-light py-3">
+            <a href="#" className="navbar-brand d-flex align-items-center gap-2">
+              <div className="bg-dark text-white p-2 rounded" style={{ backgroundColor: '#0A1A2F' }}>
+                <span className="fw-bold fs-5">CP</span>
+              </div>
+              <div className="d-flex flex-column lh-1">
+                <span className="fw-bold" style={{ fontSize: '1.1rem', color: '#0A1A2F' }}>CABINET</span>
+                <span className="text-uppercase" style={{ fontSize: '0.7rem', color: '#E0751A', letterSpacing: '2px' }}>Performances</span>
+              </div>
+            </a>
 
-        <div className="d-flex justify-content-center align-items-center gap-4 flex-wrap">
-          <AnimatePresence mode="wait">
-            {/* Clé de la motion.div pour forcer le remount (exit/enter animation) */}
-            {getVisibleClients().map((client, index) => ( 
-              <motion.div
-                key={`${client.name}-${currentIndex}-${index}`} // Clé composite pour assurer une animation de transition correcte
-                initial={{ opacity: 0, x: 100 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -100 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+            <button 
+              className="navbar-toggler border-0" 
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              <Menu size={24} />
+            </button>
+
+            <div className={`collapse navbar-collapse ${isMenuOpen ? 'show' : ''}`}>
+              <ul className="navbar-nav ms-auto gap-4">
+                <li className="nav-item"><a href="#services" className="nav-link fw-medium">FORMATIONS</a></li>
+                <li className="nav-item"><a href="#consulting" className="nav-link fw-medium">ASSISTANCES & CONSEILS</a></li>
+                <li className="nav-item"><a href="#audits" className="nav-link fw-medium">ÉTUDES & AUDITS</a></li>
+                <li className="nav-item"><a href="#recrutement" className="nav-link fw-medium">RECRUTEMENTS</a></li>
+                <li className="nav-item"><a href="#equipe" className="nav-link fw-medium">À PROPOS</a></li>
+              </ul>
+              <a 
+                href="#contact" 
+                className="btn ms-3 rounded-pill text-white fw-medium"
+                style={{ backgroundColor: '#0A1A2F' }}
               >
-                <Card
-                  className="text-center shadow-sm"
-                  style={{
-                    width: "140px",
-                    height: "80px",
-                    borderRadius: "10px",
-                    cursor: "pointer",
-                  }}
-                >
-                  <Card.Body className="d-flex flex-column justify-content-center align-items-center p-2">
-                    <h1 className="mb-0">{client.logo}</h1>
-                    <small className="text-muted">{client.name}</small>
-                  </Card.Body>
-                </Card>
-              </motion.div>
-            ))}
-          </AnimatePresence>
+                Contactez-nous
+              </a>
+            </div>
+          </nav>
         </div>
+      </motion.header>
 
-        {/* Indicateurs */}
-        <div className="d-flex justify-content-center gap-2 mt-4">
-          {clients.map((_, index) => (
+      {/* Hero Section */}
+      <section className="position-relative d-flex align-items-center justify-content-center" style={{ height: '100vh', minHeight: '600px', marginTop: '80px' }}>
+        {heroImages.map((img, index) => (
+          <motion.div
+            key={index}
+            className="position-absolute top-0 start-0 w-100 h-100"
+            style={{
+              backgroundImage: `url(${img})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              zIndex: index === currentSlide ? 1 : 0
+            }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: index === currentSlide ? 1 : 0 }}
+            transition={{ duration: 1 }}
+          />
+        ))}
+        
+        <div className="position-absolute top-0 start-0 w-100 h-100" style={{ backgroundColor: 'rgba(10, 26, 47, 0.8)', zIndex: 2 }} />
+
+        <motion.div 
+          className="position-relative text-center text-white px-4"
+          style={{ zIndex: 10, maxWidth: '900px' }}
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.3 }}
+        >
+          <span className="badge rounded-pill mb-4" style={{ backgroundColor: 'rgba(224, 117, 26, 0.2)', border: '1px solid #E0751A', color: '#E0751A' }}>
+            Excellence en Afrique de l'Ouest
+          </span>
+          <h1 className="display-4 fw-bold mb-4">
+            Cabinet Performances — Expertise, Formation & Ressources Humaines
+          </h1>
+          <p className="lead mb-5 text-white-50">
+            Nous accompagnons entreprises, organisations et administrations avec des solutions adaptées au contexte africain pour maximiser votre potentiel.
+          </p>
+          <div className="d-flex gap-3 justify-content-center flex-wrap">
+            <a href="#contact" className="btn btn-lg rounded-pill text-white" style={{ backgroundColor: '#E0751A' }}>
+              Contactez-nous
+            </a>
+            <a href="#services" className="btn btn-lg btn-outline-light rounded-pill">
+              Demander un devis
+            </a>
+          </div>
+        </motion.div>
+
+        <div className="position-absolute bottom-0 start-50 translate-middle-x mb-4 d-flex gap-2" style={{ zIndex: 10 }}>
+          {[0, 1, 2].map((i) => (
             <div
-              key={index}
-              onClick={() => setCurrentIndex(index)}
+              key={i}
+              className="rounded-circle bg-white"
               style={{
-                width: "8px",
-                height: "8px",
-                borderRadius: "50%",
-                backgroundColor: index === currentIndex ? "#FF5722" : "#ddd",
-                cursor: "pointer",
-                transition: "all 0.3s",
+                width: '8px',
+                height: '8px',
+                opacity: i === currentSlide ? 1 : 0.4,
+                transition: 'opacity 0.3s'
               }}
             />
           ))}
         </div>
-      </Container>
-    </section>
+      </section>
+
+      {/* Domains Section */}
+      <section className="py-5 bg-white">
+        <div className="container py-5">
+          <RevealOnScroll>
+            <div className="text-center mb-5">
+              <h2 className="display-5 fw-bold mb-3" style={{ color: '#0A1A2F' }}>Nos domaines d'intervention</h2>
+              <div className="mx-auto rounded-pill" style={{ width: '80px', height: '4px', backgroundColor: '#E0751A' }} />
+            </div>
+          </RevealOnScroll>
+
+          <div className="row g-4">
+            {domains.map((domain, index) => (
+              <div key={index} className="col-md-6 col-lg-3">
+                <RevealOnScroll>
+                  <motion.div 
+                    className="card h-100 border-0 shadow-sm"
+                    whileHover={{ y: -10, boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}
+                    style={{ backgroundColor: '#FAFAFA' }}
+                  >
+                    <div className="card-body p-4">
+                      <div className="mb-4 text-white rounded d-inline-flex p-3" style={{ backgroundColor: '#0A1A2F' }}>
+                        {domain.icon}
+                      </div>
+                      <h5 className="card-title fw-bold mb-3" style={{ color: '#0A1A2F' }}>{domain.title}</h5>
+                      <p className="card-text text-muted small">{domain.description}</p>
+                    </div>
+                  </motion.div>
+                </RevealOnScroll>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Services Section */}
+      <section id="services" className="py-5" style={{ backgroundColor: '#F2EDE7' }}>
+        <div className="container py-5">
+          <RevealOnScroll>
+            <div className="text-center mb-5">
+              <span className="text-uppercase fw-medium small" style={{ color: '#E0751A', letterSpacing: '2px' }}>Expertise</span>
+              <h2 className="display-5 fw-bold mt-2" style={{ color: '#0A1A2F' }}>Découvrez nos services</h2>
+            </div>
+          </RevealOnScroll>
+
+          {services.map((service, index) => (
+            <RevealOnScroll key={index}>
+              <div className={`row align-items-center g-5 ${index !== services.length - 1 ? 'mb-5 pb-5' : ''}`}>
+                <div className={`col-lg-6 ${service.imageRight ? 'order-lg-2' : ''}`}>
+                  <motion.div 
+                    className="rounded-4 overflow-hidden shadow-lg"
+                    style={{ height: '450px' }}
+                    whileHover={{ scale: 1.02 }}
+                  >
+                    <img src={service.image} alt={service.title} className="w-100 h-100 object-fit-cover" />
+                  </motion.div>
+                </div>
+                <div className={`col-lg-6 ${service.imageRight ? 'order-lg-1' : ''}`}>
+                  <div className="bg-white rounded-circle d-inline-flex p-3 mb-4 shadow-sm" style={{ color: '#E0751A' }}>
+                    {service.icon}
+                  </div>
+                  <h3 className="display-6 fw-bold mb-4" style={{ color: '#0A1A2F' }}>{service.title}</h3>
+                  <p className="lead mb-4" style={{ color: '#2F475E' }}>{service.description}</p>
+                  {service.features && (
+                    <ul className="list-unstyled mb-4">
+                      {service.features.map((feature, i) => (
+                        <li key={i} className="d-flex align-items-center gap-2 mb-2">
+                          <Check size={16} style={{ color: '#E0751A' }} />
+                          <span className="small">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  <a href="#" className="text-decoration-none fw-semibold d-inline-flex align-items-center gap-2" style={{ color: '#E0751A' }}>
+                    En savoir plus <ArrowRight size={16} />
+                  </a>
+                </div>
+              </div>
+            </RevealOnScroll>
+          ))}
+        </div>
+      </section>
+
+      {/* Team Section */}
+      <section id="equipe" className="py-5 bg-white">
+        <div className="container py-5">
+          <RevealOnScroll>
+            <div className="text-center mb-5">
+              <h2 className="display-5 fw-bold mb-3" style={{ color: '#0A1A2F' }}>Une équipe expérimentée</h2>
+              <p className="text-muted">Des consultants seniors et experts métiers dédiés à votre réussite.</p>
+            </div>
+          </RevealOnScroll>
+
+          <div className="row g-4">
+            {team.map((member, index) => (
+              <div key={index} className="col-sm-6 col-lg-3">
+                <RevealOnScroll>
+                  <motion.div whileHover={{ y: -10 }}>
+                    <div className="rounded-3 overflow-hidden mb-3" style={{ aspectRatio: '4/5' }}>
+                      <motion.img 
+                        src={member.image} 
+                        alt={member.name} 
+                        className="w-100 h-100 object-fit-cover"
+                        style={{ filter: 'grayscale(100%)' }}
+                        whileHover={{ filter: 'grayscale(0%)', scale: 1.05 }}
+                        transition={{ duration: 0.5 }}
+                      />
+                    </div>
+                    <h5 className="fw-bold mb-1" style={{ color: '#0A1A2F' }}>{member.name}</h5>
+                    <p className="small fw-medium" style={{ color: '#E0751A' }}>{member.role}</p>
+                  </motion.div>
+                </RevealOnScroll>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="py-5" style={{ backgroundColor: '#FAFAFA' }}>
+        <div className="container py-5">
+          <RevealOnScroll>
+            <div className="text-center mb-5">
+              <h2 className="display-5 fw-bold" style={{ color: '#0A1A2F' }}>Ils nous font confiance</h2>
+            </div>
+          </RevealOnScroll>
+
+          <div className="row g-4">
+            {testimonials.map((testimonial, index) => (
+              <div key={index} className="col-md-4">
+                <RevealOnScroll>
+                  <div className="card h-100 border-0 shadow-sm bg-white position-relative p-4">
+                    <Quote size={32} className="position-absolute top-0 end-0 m-4 opacity-25" style={{ color: '#E0751A' }} />
+                    <p className="fst-italic text-muted mb-4">{testimonial.quote}</p>
+                    <div className="d-flex align-items-center gap-3 mt-auto">
+                      <div className="rounded-circle bg-secondary d-flex align-items-center justify-content-center text-white fw-bold" style={{ width: '40px', height: '40px', fontSize: '0.75rem' }}>
+                        {testimonial.initials}
+                      </div>
+                      <div>
+                        <p className="mb-0 fw-bold small" style={{ color: '#0A1A2F' }}>{testimonial.author}</p>
+                        <p className="mb-0 text-muted" style={{ fontSize: '0.75rem' }}>{testimonial.company}</p>
+                      </div>
+                    </div>
+                  </div>
+                </RevealOnScroll>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Partners Section */}
+      <section className="py-5 bg-white border-top">
+        <div className="container">
+          <p className="text-center text-uppercase text-muted small mb-4" style={{ letterSpacing: '2px' }}>Ils collaborent avec nous</p>
+          <div className="d-flex flex-wrap justify-content-center align-items-center gap-5">
+            <span className="fw-bold fs-5" style={{ color: '#0A1A2F' }}>orange</span>
+            <span className="fw-bold fs-5 fst-italic" style={{ color: '#0A1A2F' }}>MTN</span>
+            <span className="fw-bold fs-5" style={{ color: '#0A1A2F' }}>PharmaGroup</span>
+            <span className="fw-bold fs-5" style={{ color: '#0A1A2F' }}>SOCIÉTÉ GÉNÉRALE</span>
+            <span className="fw-bold fs-5" style={{ color: '#0A1A2F' }}>CIE</span>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer id="contact" className="py-5 text-white" style={{ backgroundColor: '#0A1A2F' }}>
+        <div className="container py-4">
+          <div className="row g-5 mb-5">
+            <div className="col-md-6 col-lg-3">
+              <div className="d-flex align-items-center gap-2 mb-4">
+                <div className="bg-white text-dark p-2 rounded">
+                  <span className="fw-bold">CP</span>
+                </div>
+                <span className="fw-bold">CABINET PERFORMANCES</span>
+              </div>
+              <p className="small text-white-50 mb-4">
+                Partenaire de confiance pour le développement des compétences et la performance organisationnelle en Afrique de l'Ouest.
+              </p>
+              <div className="d-flex gap-3">
+                <a href="#" className="btn btn-sm rounded-circle" style={{ backgroundColor: '#2F475E' }}>
+                  <Linkedin size={16} />
+                </a>
+                <a href="#" className="btn btn-sm rounded-circle" style={{ backgroundColor: '#2F475E' }}>
+                  <Facebook size={16} />
+                </a>
+                <a href="#" className="btn btn-sm rounded-circle" style={{ backgroundColor: '#2F475E' }}>
+                  <MessageCircle size={16} />
+                </a>
+              </div>
+            </div>
+
+            <div className="col-md-6 col-lg-3">
+              <h5 className="fw-semibold mb-4">Liens Rapides</h5>
+              <ul className="list-unstyled small">
+                <li className="mb-2"><a href="#" className="text-white-50 text-decoration-none">Accueil</a></li>
+                <li className="mb-2"><a href="#services" className="text-white-50 text-decoration-none">Nos Formations</a></li>
+                <li className="mb-2"><a href="#audits" className="text-white-50 text-decoration-none">Études & Audits</a></li>
+                <li className="mb-2"><a href="#equipe" className="text-white-50 text-decoration-none">Notre Équipe</a></li>
+                <li className="mb-2"><a href="#contact" className="text-white-50 text-decoration-none">Contact</a></li>
+              </ul>
+            </div>
+
+            <div className="col-md-6 col-lg-3">
+              <h5 className="fw-semibold mb-4">Contact</h5>
+              <ul className="list-unstyled small text-white-50">
+                <li className="mb-3 d-flex gap-3">
+                  <MapPin size={20} style={{ color: '#E0751A' }} className="flex-shrink-0" />
+                  <span>Cocody Riviera 3, Abidjan,<br />Côte d'Ivoire</span>
+                </li>
+                <li className="mb-3 d-flex gap-3">
+                  <Phone size={20} style={{ color: '#E0751A' }} className="flex-shrink-0" />
+                  <span>+225 07 07 00 00 00</span>
+                </li>
+                <li className="mb-3 d-flex gap-3">
+                  <Mail size={20} style={{ color: '#E0751A' }} className="flex-shrink-0" />
+                  <span>contact@cabinet-performances.com</span>
+                </li>
+              </ul>
+            </div>
+
+            <div className="col-md-6 col-lg-3">
+              <h5 className="fw-semibold mb-4">Accréditations</h5>
+              <div className="mb-3 p-3 rounded border border-secondary" style={{ backgroundColor: 'rgba(47, 71, 94, 0.3)' }}>
+                <div className="d-flex align-items-center gap-3">
+                  <Award size={32} style={{ color: '#E0751A' }} />
+                  <div>
+                    <p className="mb-0 small text-uppercase text-white-50" style={{ fontSize: '0.7rem' }}>Agrément</p>
+                    <p className="mb-0 fw-bold small">FDFP Certifié</p>
+                  </div>
+                </div>
+              </div>
+              <div className="p-3 rounded border border-secondary" style={{ backgroundColor: 'rgba(47, 71, 94, 0.3)' }}>
+                <div className="d-flex align-items-center gap-3">
+                  <CheckCircle size={32} style={{ color: '#E0751A' }} />
+                  <div>
+                    <p className="mb-0 small text-uppercase text-white-50" style={{ fontSize: '0.7rem' }}>Certificat</p>
+                    <p className="mb-0 fw-bold small">CDMP Partner</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="border-top pt-4 text-center" style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}>
+            <p className="mb-0 small text-white-50">© 2023 Cabinet Performances. Tous droits réservés. Mentions Légales.</p>
+          </div>
+        </div>
+      </footer>
+    </div>
   );
 };
 
-// -------------------- FOOTER ------------------------
-const FooterSection = () => (
-  <footer className="py-5 text-white" style={{ backgroundColor: "#FF5722" }} id="contacts"> {/* Ajout d'un ID pour la navigation */}
-    <Container>
-      <Row className="g-4">
-        {/* Section À propos */}
-        <Col xs={12} md={4}>
-          <h5 className="fw-bold mb-3">À propos de Cabinet Performances</h5>
-          <p className="small mb-3" style={{ opacity: 0.9 }}>
-            Depuis plus de 15 ans, Cabinet Performances SARL accompagne les
-            entreprises en Côte d'Ivoire et en Afrique de l'Ouest dans leur
-            développement.
-          </p>
-          <p className="small fw-bold">Cabinet FDFP et agréé CDMP</p>
-        </Col>
-
-        {/* Section Statistiques */}
-        <Col xs={12} md={4}>
-          <h5 className="fw-bold mb-3">Nos valeurs</h5>
-          <div className="mb-3">
-            <h3 className="fw-bold mb-0">500+</h3>
-            <small style={{ opacity: 0.9 }}>Entreprises clientes</small>
-          </div>
-          <div>
-            <h3 className="fw-bold mb-0">12K+</h3>
-            <small style={{ opacity: 0.9 }}>Personnes formées</small>
-          </div>
-        </Col>
-
-        {/* Section Contact */}
-        <Col xs={12} md={4}>
-          <h5 className="fw-bold mb-3">Contactez-nous</h5>
-          <div className="small mb-2">
-            <span className="me-2">📞</span>
-            <span>+225 XX XX XX XX XX</span>
-          </div>
-          <div className="small mb-2">
-            <span className="me-2">✉️</span>
-            <span>contact@performances.ci</span>
-          </div>
-          <div className="small mb-3">
-            <span className="me-2">📍</span>
-            <span>Abidjan, Côte d'Ivoire</span>
-          </div>
-
-          {/* Réseaux sociaux */}
-          <div className="d-flex gap-2 mt-3">
-            <Button
-              variant="light"
-              size="sm"
-              className="rounded-circle"
-              style={{
-                width: "40px",
-                height: "40px",
-                backgroundColor: "rgba(255,255,255,0.1)",
-                border: "none",
-                color: "white",
-              }}
-            >
-              f
-            </Button>
-            <Button
-              variant="light"
-              size="sm"
-              className="rounded-circle"
-              style={{
-                width: "40px",
-                height: "40px",
-                backgroundColor: "rgba(255,255,255,0.1)",
-                border: "none",
-                color: "white",
-              }}
-            >
-              in
-            </Button>
-            <Button
-              variant="light"
-              size="sm"
-              className="rounded-circle"
-              style={{
-                width: "40px",
-                height: "40px",
-                backgroundColor: "rgba(255,255,255,0.1)",
-                border: "none",
-                color: "white",
-              }}
-            >
-              𝕏
-            </Button>
-          </div>
-        </Col>
-      </Row>
-
-      <hr style={{ backgroundColor: "rgba(255,255,255,0.2)", marginTop: "2rem" }} />
-
-      <p className="text-center small mb-0" style={{ opacity: 0.9 }}>
-        © 2025 Cabinet Performances SARL — Tous droits réservés.
-      </p>
-    </Container>
-  </footer>
-);
-
-// ----------------------------------------------------
-// 6. HOMEPAGE (PAGE FINALE ASSEMBLÉE)
-// ----------------------------------------------------
-export default function HomePage() {
-  return (
-    <> {/* CORRECTION 1: Remplacement de la div par un Fragment (<>) */}
-      <Header />
-      {/* CORRECTION 2: Ajout d'une div pour le décalage, car la Navbar est `fixed="top"` */}
-      <div style={{ paddingTop: "56px" }}> 
-        <HeroSection />
-        <DomainesSection />
-        <CatalogueSection />
-        <AssistancesSection />
-        <EtudesSection />
-        <RecrutementSection />
-        <AProposSection />
-        <ClientsSection />
-        <FooterSection />
-      </div>
-    </>
-  );
-}
+export default HomePage;
