@@ -125,51 +125,52 @@ const FormationsPage: React.FC = () => {
 
   return (
     <div style={{ backgroundColor: '#FAFAFA', color: '#2F475E', fontFamily: 'Inter, sans-serif' }}>
-      {/* Header - Same as Homepage */}
-      <motion.header 
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        className="fixed-top bg-white shadow-sm"
-        style={{ backdropFilter: 'blur(10px)', backgroundColor: 'rgba(255, 255, 255, 0.95)', zIndex: 1000 }}
-      >
-        <div className="container">
-          <nav className="navbar navbar-expand-lg navbar-light py-3">
-            <a href="#" className="navbar-brand d-flex align-items-center gap-2">
-              <div className="bg-dark text-white p-2 rounded" style={{ backgroundColor: '#0A1A2F' }}>
-                <span className="fw-bold fs-5">CP</span>
-              </div>
-              <div className="d-flex flex-column lh-1">
-                <span className="fw-bold" style={{ fontSize: '1.1rem', color: '#0A1A2F' }}>CABINET</span>
-                <span className="text-uppercase" style={{ fontSize: '0.7rem', color: '#E0751A', letterSpacing: '2px' }}>Performances</span>
-              </div>
-            </a>
-
-            <button 
-              className="navbar-toggler border-0" 
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              <Menu size={24} />
-            </button>
-
-            <div className={`collapse navbar-collapse ${isMenuOpen ? 'show' : ''}`}>
-              <ul className="navbar-nav ms-auto gap-4">
-                <li className="nav-item"><a href="#services" className="nav-link fw-medium">FORMATIONS</a></li>
-                <li className="nav-item"><a href="#consulting" className="nav-link fw-medium">ASSISTANCES & CONSEILS</a></li>
-                <li className="nav-item"><a href="#audits" className="nav-link fw-medium">ÉTUDES & AUDITS</a></li>
-                <li className="nav-item"><a href="#recrutement" className="nav-link fw-medium">RECRUTEMENTS</a></li>
-                <li className="nav-item"><a href="#equipe" className="nav-link fw-medium">À PROPOS</a></li>
-              </ul>
-              <a 
-                href="#contact" 
-                className="btn ms-3 rounded-pill text-white fw-medium"
-                style={{ backgroundColor: '#0A1A2F' }}
-              >
-                Contactez-nous
-              </a>
+          {/* Header */}
+          <motion.header 
+            initial={{ y: -100 }}
+            animate={{ y: 0 }}
+            className="fixed-top bg-white shadow-sm"
+            style={{ backdropFilter: 'blur(10px)', backgroundColor: 'rgba(255, 255, 255, 0.95)', zIndex: 1000 }}
+          >
+            <div className="container">
+              <nav className="navbar navbar-expand-lg navbar-light py-3">
+                <a href="#" className="navbar-brand d-flex align-items-center gap-2">
+                  <div className="bg-dark text-white p-2 rounded" style={{ backgroundColor: '#0A1A2F' }}>
+                    <span className="fw-bold fs-5">CP</span>
+                  </div>
+                  <div className="d-flex flex-column lh-1">
+                    <span className="fw-bold" style={{ fontSize: '1.1rem', color: '#0A1A2F' }}>CABINET</span>
+                    <span className="text-uppercase" style={{ fontSize: '0.7rem', color: '#E0751A', letterSpacing: '2px' }}>Performances</span>
+                  </div>
+                </a>
+    
+                <button 
+                  className="navbar-toggler border-0" 
+                  onClick={() => setIsMenuOpen(!isMenuOpen)}
+                >
+                  <Menu size={24} />
+                </button>
+    
+                <div className={`collapse navbar-collapse ${isMenuOpen ? 'show' : ''}`}>
+                  <ul className="navbar-nav ms-auto gap-2">
+                    <li className="nav-item"><a href="#" className="nav-link fw-medium" style={{ fontSize: '0.8rem' }}>ACCUEIL</a></li>
+                    <li className="nav-item"><a href="#formations" className="nav-link fw-medium" style={{ fontSize: '0.8rem' }}>FORMATIONS</a></li>
+                    <li className="nav-item"><a href="#assistances" className="nav-link fw-medium" style={{ fontSize: '0.8rem' }}>ASSISTANCES & CONSEILS</a></li>
+                    <li className="nav-item"><a href="#audits" className="nav-link fw-medium" style={{ fontSize: '0.8rem' }}>ÉTUDES & AUDITS</a></li>
+                    <li className="nav-item"><a href="#recrutement" className="nav-link fw-medium" style={{ fontSize: '0.8rem' }}>RECRUTEMENTS</a></li>
+                    <li className="nav-item"><a href="#equipe" className="nav-link fw-medium" style={{ fontSize: '0.8rem' }}>À PROPOS</a></li>
+                  </ul>
+                  <a 
+                    href="#contact" 
+                    className="btn ms-3 rounded-pill text-white fw-medium"
+                    style={{ backgroundColor: '#0A1A2F' }}
+                  >
+                    Contactez-nous
+                  </a>
+                </div>
+              </nav>
             </div>
-          </nav>
-        </div>
-      </motion.header>
+          </motion.header>
 
       {/* Hero Section */}
       <section 
@@ -226,7 +227,7 @@ const FormationsPage: React.FC = () => {
                   letterSpacing: '0.15em'
                 }}
               >
-                Excellence & Expertise
+                Cabinet Performances
               </span>
             </div>
 
@@ -812,7 +813,7 @@ const FormationsPage: React.FC = () => {
               <ul className="list-unstyled small text-white-50">
                 <li className="mb-3 d-flex gap-3">
                   <MapPin size={20} style={{ color: '#E0751A' }} className="flex-shrink-0" />
-                  <span>Cocody Riviera 3, Abidjan,<br />Côte d'Ivoire</span>
+                  <span>Cocody Cité Des Arts, Abidjan,<br />Côte d'Ivoire</span>
                 </li>
                 <li className="mb-3 d-flex gap-3">
                   <Phone size={20} style={{ color: '#E0751A' }} className="flex-shrink-0" />
@@ -849,7 +850,7 @@ const FormationsPage: React.FC = () => {
           </div>
 
           <div className="border-top pt-4 text-center" style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}>
-            <p className="mb-0 small text-white-50">© 2023 Cabinet Performances. Tous droits réservés. Mentions Légales.</p>
+            <p className="mb-0 small text-white-50">© 2025 Cabinet Performances. Tous droits réservés. Mentions Légales.</p>
           </div>
         </div>
       </footer>

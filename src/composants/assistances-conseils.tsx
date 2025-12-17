@@ -210,7 +210,7 @@ const AssistanceConseilsPage: React.FC = () => {
             <div className={`collapse navbar-collapse ${isMenuOpen ? 'show' : ''}`}>
               <ul className="navbar-nav ms-auto gap-4">
                 <li className="nav-item"><a href="#services" className="nav-link fw-medium">FORMATIONS</a></li>
-                <li className="nav-item"><a href="#consulting" className="nav-link fw-medium">CONSEILS</a></li>
+                <li className="nav-item"><a href="#consulting" className="nav-link fw-medium">ASSISTANCES & CONSEILS</a></li>
                 <li className="nav-item"><a href="#audits" className="nav-link fw-medium">ÉTUDES & AUDITS</a></li>
                 <li className="nav-item"><a href="#recrutement" className="nav-link fw-medium">RECRUTEMENTS</a></li>
                 <li className="nav-item"><a href="#equipe" className="nav-link fw-medium">À PROPOS</a></li>
@@ -312,7 +312,7 @@ const AssistanceConseilsPage: React.FC = () => {
             }}
           >
             <span className="text-uppercase fw-semibold" style={{ color: '#D4AF37', fontSize: '0.7rem', letterSpacing: '0.2em' }}>
-              Excellence & Stratégie
+              Cabinet Performnces
             </span>
           </motion.div>
 
@@ -597,15 +597,7 @@ const AssistanceConseilsPage: React.FC = () => {
                         {feature}
                       </li>
                     ))}
-                  </ul>
-
-                  <a 
-                    href="#" 
-                    className="d-inline-flex align-items-center gap-2 text-decoration-none fw-semibold small"
-                    style={{ color: '#E0751A' }}
-                  >
-                    En savoir plus <ArrowRight size={16} />
-                  </a>
+                  </ul>               
                 </RevealOnScroll>
               </div>
             </div>
@@ -824,7 +816,7 @@ const AssistanceConseilsPage: React.FC = () => {
           </div>
 
           <div className="border-top pt-4 text-center" style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}>
-            <p className="mb-0 small text-white-50">© 2023 Cabinet Performances. Tous droits réservés. Mentions Légales.</p>
+            <p className="mb-0 small text-white-50">© 2025 Cabinet Performances. Tous droits réservés. Mentions Légales.</p>
           </div>
         </div>
       </footer>
