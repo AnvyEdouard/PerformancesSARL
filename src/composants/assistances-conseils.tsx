@@ -9,6 +9,7 @@ import {
   MessageCircle, ChevronDown
 } from 'lucide-react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Link } from 'react-router-dom';
 
 // Animation variants
 const fadeInUp: Variants = { // <-- Ajout du type Variants
@@ -21,6 +22,120 @@ const fadeInUp: Variants = { // <-- Ajout du type Variants
       ease: [0.16, 1, 0.3, 1] as any // <-- CORRECTION TS2322 : Cast pour le tableau de Bézier
     } 
   }
+};
+
+// ========================================
+// COMPOSANT: ServiceCard
+// Affiche un service avec texte ou vidéo selon contentType
+// ========================================
+interface ServiceCardProps {
+  service: {
+    icon: React.ReactNode;
+    title: string;
+    contentType: 'text' | 'video';
+    description: string;
+    textContent?: string;
+    videoUrl?: string;
+    features: string[];
+  };
+  index: number;
+}
+
+const ServiceCard: React.FC<ServiceCardProps> = ({ service, index }) => {
+  return (
+    <div className={`row align-items-center g-5 ${index !== 2 ? 'mb-5 pb-5' : ''}`}>
+      {/* Colonne média (texte ou vidéo) */}
+      <div className={`col-lg-6 ${index % 2 === 1 ? 'order-lg-2' : ''}`}>
+        <RevealOnScroll>
+          {service.contentType === 'video' ? (
+            // Rendu vidéo
+            <motion.div 
+              className="overflow-hidden rounded-4 position-relative"
+              style={{ aspectRatio: '16/9', backgroundColor: 'rgba(255, 255, 255, 0.05)' }}
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.3 }}
+            >
+              <iframe
+                width="100%"
+                height="100%"
+                src={service.videoUrl}
+                title={service.title}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="rounded-4"
+              />
+            </motion.div>
+          ) : (
+            // Rendu texte
+            <motion.div 
+              className="p-4 rounded-4 border"
+              style={{ 
+                backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                borderColor: 'rgba(255, 255, 255, 0.08)',
+                backdropFilter: 'blur(12px)'
+              }}
+              whileHover={{ 
+                borderColor: 'rgba(224, 117, 26, 0.3)',
+                backgroundColor: 'rgba(255, 255, 255, 0.05)'
+              }}
+              transition={{ duration: 0.3 }}
+            >
+              <p 
+                className="mb-0" 
+                style={{ 
+                  color: 'rgba(255, 255, 255, 0.7)', 
+                  lineHeight: '1.8',
+                  textAlign: 'justify'
+                }}
+              >
+                {service.textContent}
+              </p>
+            </motion.div>
+          )}
+        </RevealOnScroll>
+      </div>
+
+      {/* Colonne informations */}
+      <div className={`col-lg-6 ${index % 2 === 1 ? 'order-lg-1' : ''}`}>
+        <RevealOnScroll delay={0.1}>
+          <div className="d-flex align-items-center gap-3 mb-4">
+            <motion.div 
+              className="d-inline-flex align-items-center justify-center rounded-circle"
+              style={{ 
+                width: '48px', 
+                height: '48px',
+                backgroundColor: 'rgba(224, 117, 26, 0.1)',
+                color: '#E0751A'
+              }}
+              whileHover={{ 
+                backgroundColor: '#E0751A', 
+                color: 'white',
+                rotate: 15 
+              }}
+              transition={{ duration: 0.5 }}
+            >
+              {service.icon}
+            </motion.div>
+            <h3 className="fs-4 fw-bold text-white mb-0">{service.title}</h3>
+          </div>
+
+          <p className="mb-4" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
+            {service.description}
+          </p>
+
+          <ul className="list-unstyled mb-0">
+            {service.features.map((feature, idx) => (
+              <li key={idx} className="d-flex align-items-start gap-3 mb-3 small text-white-50">
+                <CheckCircle size={18} className="flex-shrink-0 mt-1" style={{ color: '#D4AF37' }} />
+                <span>{feature}</span>
+              </li>
+            ))}
+          </ul>
+        </RevealOnScroll>
+      </div>
+    </div>
+  );
 };
 
 // const scaleIn = { // <-- CORRECTION TS6133 : Variable commentée car non utilisée
@@ -157,220 +272,242 @@ const AssistanceConseilsPage: React.FC = () => {
     }
   ];
 
-  const testimonials = [
-    {
-      quote: "Une approche chirurgicale de nos problématiques. Cabinet Performances a su restructurer notre pôle investissement avec une efficacité redoutable.",
-      author: "Directeur Général",
-      company: "Groupe Bancaire",
-      image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=100&h=100"
-    },
-    {
-      quote: "L'humain est au cœur de leur méthode. La transformation culturelle menée sur 12 mois a drastiquement réduit notre turnover.",
-      author: "DRH Groupe",
-      company: "Leader BTP",
-      image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80&w=100&h=100",
-      featured: true
-    },
-    {
-      quote: "Un audit comptable et fiscal qui a permis de dégager des marges de manœuvre inespérées pour notre développement futur.",
-      author: "Gérant",
-      company: "Grande Pharmacie",
-      image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=100&h=100"
-    }
-  ];
+// ========================================
+// DONNÉES: SERVICES (TEXTE/VIDÉO)
+// 3 services avec contentType pour rendu conditionnel
+// ========================================
+const subServices = [
+  {
+    icon: <BarChart3 size={24} />,
+    title: 'Conseil Assistance Comptable & Expertise Financière',
+    contentType: 'text' as const,
+    description: 'Expertise comptable et financière de haut niveau pour une gestion rigoureuse et conforme.',
+    textContent: 'Notre cabinet vous accompagne dans la gestion complète de vos obligations comptables et financières. Nous assurons la tenue quotidienne de votre comptabilité avec rigueur et conformité aux normes SYSCOHADA. Notre équipe d\'experts certifiés établit vos états financiers annuels (bilan, compte de résultat, annexes) et réalise des audits légaux et contractuels pour sécuriser vos opérations. Nous intervenons également en ingénierie financière pour structurer vos montages financiers, optimiser votre fiscalité et accompagner vos levées de fonds.',
+    features: [
+      'Tenue de comptabilité générale et auxiliaire',
+      'Établissement des états financiers certifiés SYSCOHADA',
+      'Audit légal (CAC) et contractuel',
+      'Ingénierie financière et optimisation fiscale'
+    ]
+  },
+  {
+    icon: <FileCheck size={24} />,
+    title: 'GAPD : Gestion de l\'Audit et des Procédures de Direction',
+    contentType: 'video' as const,
+    description: 'Structuration et sécurisation de vos processus de gouvernance pour une performance maîtrisée.',
+    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    features: [
+      'Élaboration de manuels de procédures sur mesure',
+      'Audit et renforcement du contrôle interne',
+      'Cartographie et gestion des risques opérationnels',
+      'Pilotage stratégique et tableaux de bord directionnels'
+    ]
+  },
+  {
+    icon: <Users2 size={24} />,
+    title: 'Conseil Organisationnel & Assistance Opérationnelle',
+    contentType: 'text' as const,
+    description: 'Transformation organisationnelle et excellence opérationnelle pour libérer le potentiel de vos équipes.',
+    textContent: 'Nous accompagnons votre entreprise dans sa transformation organisationnelle globale. Notre approche intègre la restructuration d\'entreprises en difficulté ou en phase de croissance, l\'optimisation des processus RH (recrutement, GPEC, politique de rémunération), le coaching de direction pour renforcer les compétences managériales, et l\'accompagnement vers la transformation digitale de vos opérations. Notre méthodologie éprouvée garantit une conduite du changement réussie avec l\'adhésion de vos collaborateurs.',
+    features: [
+      'Restructuration et réorganisation d\'entreprises',
+      'Optimisation des processus RH et GPEC',
+      'Coaching de direction et développement du leadership',
+      'Accompagnement à la transformation digitale'
+    ]
+  }
+];
 
   return (
-    <div style={{ backgroundColor: '#FAFAFA', color: '#2F475E', fontFamily: 'Inter, sans-serif', overflowX: 'hidden' }}>
-      {/* Header - Same as Homepage */}
-      <motion.header 
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        className="fixed-top bg-white shadow-sm"
-        style={{ backdropFilter: 'blur(10px)', backgroundColor: 'rgba(255, 255, 255, 0.95)', zIndex: 1000 }}
-      >
-        <div className="container">
-          <nav className="navbar navbar-expand-lg navbar-light py-3">
-            <a href="#" className="navbar-brand d-flex align-items-center gap-2">
-              <div className="bg-dark text-white p-2 rounded" style={{ backgroundColor: '#0A1A2F' }}>
-                <span className="fw-bold fs-5">CP</span>
-              </div>
-              <div className="d-flex flex-column lh-1">
-                <span className="fw-bold" style={{ fontSize: '1.1rem', color: '#0A1A2F' }}>CABINET</span>
-                <span className="text-uppercase" style={{ fontSize: '0.7rem', color: '#E0751A', letterSpacing: '2px' }}>Performances</span>
-              </div>
-            </a>
+    <div style={{ backgroundColor: '#FAFAFA', color: '#2F475E', fontFamily: 'Inter, sans-serif' }}>
+      {/* Header */}
+      <motion.header 
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        className="fixed-top bg-white shadow-sm"
+        style={{ backdropFilter: 'blur(10px)', backgroundColor: 'rgba(255, 255, 255, 0.95)', zIndex: 1000 }}
+      >
+        <div className="container">
+          <nav className="navbar navbar-expand-lg navbar-light py-3">
+            <Link to="/" className="navbar-brand d-flex align-items-center gap-2">
+              <div className="bg-dark text-white p-2 rounded" style={{ backgroundColor: '#0A1A2F' }}>
+                <span className="fw-bold fs-5">CP</span>
+              </div>
+              <div className="d-flex flex-column lh-1">
+                <span className="fw-bold" style={{ fontSize: '1.1rem', color: '#0A1A2F' }}>CABINET</span>
+                <span className="text-uppercase" style={{ fontSize: '0.7rem', color: '#E0751A', letterSpacing: '2px' }}>Performances</span>
+              </div>
+            </Link>
 
-            <button 
-              className="navbar-toggler border-0" 
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              <Menu size={24} />
-            </button>
+            <button 
+              className="navbar-toggler border-0" 
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              <Menu size={24} />
+            </button>
 
-            <div className={`collapse navbar-collapse ${isMenuOpen ? 'show' : ''}`}>
-              <ul className="navbar-nav ms-auto gap-4">
-                <li className="nav-item"><a href="#services" className="nav-link fw-medium">FORMATIONS</a></li>
-                <li className="nav-item"><a href="#consulting" className="nav-link fw-medium">ASSISTANCES & CONSEILS</a></li>
-                <li className="nav-item"><a href="#audits" className="nav-link fw-medium">ÉTUDES & AUDITS</a></li>
-                <li className="nav-item"><a href="#recrutement" className="nav-link fw-medium">RECRUTEMENTS</a></li>
-                <li className="nav-item"><a href="#equipe" className="nav-link fw-medium">À PROPOS</a></li>
-              </ul>
-              <a 
-                href="#contact" 
-                className="btn ms-3 rounded-pill text-white fw-medium"
-                style={{ backgroundColor: '#0A1A2F' }}
-              >
-                Contactez-nous
-              </a>
-            </div>
-          </nav>
-        </div>
-      </motion.header>
+            <div className={`collapse navbar-collapse ${isMenuOpen ? 'show' : ''}`}>
+              <ul className="navbar-nav ms-auto gap-2">
+                <li className="nav-item">
+                  <Link to="/" className="nav-link fw-medium" style={{ fontSize: '0.8rem' }}>
+                    ACCUEIL
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/formations" className="nav-link fw-medium" style={{ fontSize: '0.8rem' }}>
+                    FORMATIONS
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/assistances-conseils" className="nav-link fw-medium" style={{ fontSize: '0.8rem' }}>
+                    ASSISTANCES & CONSEILS
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/etudes-audits" className="nav-link fw-medium" style={{ fontSize: '0.8rem' }}>
+                    ÉTUDES & AUDITS
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/recrutements" className="nav-link fw-medium" style={{ fontSize: '0.8rem' }}>
+                    RECRUTEMENTS
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/a-propos" className="nav-link fw-medium" style={{ fontSize: '0.8rem' }}>
+                    À PROPOS
+                  </Link>
+                </li>
+              </ul>
+              <a 
+                href="#contact" 
+                className="btn ms-3 rounded-pill text-white fw-medium"
+                style={{ backgroundColor: '#0A1A2F' }}
+              >
+                Contactez-nous
+              </a>
+            </div>
+          </nav>
+        </div>
+      </motion.header>
 
-      {/* Hero Section with Parallax */}
-      <section 
-        ref={heroRef}
-        className="position-relative d-flex align-items-center justify-content-center overflow-hidden"
-        style={{ height: '100vh', minHeight: '600px', marginTop: '80px', backgroundColor: '#0A1A2F' }}
-      >
-        <motion.div 
-          className="position-absolute top-0 start-0 w-100 h-100"
-          style={{ scale: heroScale, y: heroY, zIndex: 0 }}
-        >
-          <img 
-            src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=2664&auto=format&fit=crop"
-            alt="Strategy Meeting"
-            className="w-100 h-100 object-fit-cover"
-            style={{ opacity: 0.4, filter: 'grayscale(30%)' }}
-          />
-          <div 
-            className="position-absolute top-0 start-0 w-100 h-100"
-            style={{ 
-              background: 'linear-gradient(to right, rgba(10, 26, 47, 0.95), rgba(10, 26, 47, 0.8), rgba(10, 26, 47, 0.6))'
-            }}
-          />
-        </motion.div>
+     {/* ========================================
+    SECTION: HERO AVEC PARALLAX
+    Nouvelle phrase d'accroche
+    ======================================== */}
+<section 
+  ref={heroRef} 
+  className="position-relative d-flex align-items-center justify-content-center overflow-hidden" 
+  style={{ height: '100vh', minHeight: '600px', marginTop: '80px', backgroundColor: '#0A1A2F' }}
+>
+  {/* Image de fond avec parallax */}
+  <motion.div 
+    className="position-absolute top-0 start-0 w-100 h-100" 
+    style={{ scale: heroScale, y: heroY, zIndex: 0 }}
+  >
+    <img 
+      src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=2664&auto=format&fit=crop" 
+      alt="Strategy Meeting" 
+      className="w-100 h-100 object-fit-cover" 
+      style={{ opacity: 0.4, filter: 'grayscale(30%)' }} 
+    />
+    <div 
+      className="position-absolute top-0 start-0 w-100 h-100" 
+      style={{ background: 'linear-gradient(to right, rgba(10, 26, 47, 0.95), rgba(10, 26, 47, 0.8), rgba(10, 26, 47, 0.6))' }} 
+    />
+  </motion.div>
 
-        {/* Floating Particles */}
-        <div className="position-absolute top-0 start-0 w-100 h-100" style={{ zIndex: 0, pointerEvents: 'none' }}>
-          <motion.div 
-            className="position-absolute rounded-circle"
-            style={{ 
-              top: '25%',
-              left: '25%',
-              width: '8px',
-              height: '8px',
-              backgroundColor: '#D4AF37',
-              opacity: 0.4
-            }}
-            animate={{ y: [0, -20, 0] }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          />
-          <motion.div 
-            className="position-absolute rounded-circle"
-            style={{ 
-              bottom: '33%',
-              right: '25%',
-              width: '12px',
-              height: '12px',
-              backgroundColor: '#E0751A',
-              opacity: 0.3
-            }}
-            animate={{ y: [0, -20, 0] }}
-            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-          />
-          <motion.div 
-            className="position-absolute rounded-circle"
-            style={{ 
-              top: '50%',
-              right: '40px',
-              width: '256px',
-              height: '256px',
-              border: '1px solid rgba(212, 175, 55, 0.1)'
-            }}
-            animate={{ rotate: 360 }}
-            transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-          />
-        </div>
+  {/* Floating Particles */}
+  <div className="position-absolute top-0 start-0 w-100 h-100" style={{ zIndex: 0, pointerEvents: 'none' }}>
+    <motion.div 
+      className="position-absolute rounded-circle"
+      style={{ top: '25%', left: '25%', width: '8px', height: '8px', backgroundColor: '#D4AF37', opacity: 0.4 }}
+      animate={{ y: [0, -20, 0] }}
+      transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+    />
+    <motion.div 
+      className="position-absolute rounded-circle"
+      style={{ bottom: '33%', right: '25%', width: '12px', height: '12px', backgroundColor: '#E0751A', opacity: 0.3 }}
+      animate={{ y: [0, -20, 0] }}
+      transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+    />
+  </div>
 
-        <motion.div 
-          className="position-relative text-center px-4"
-          style={{ zIndex: 10, maxWidth: '900px', paddingTop: '80px' }}
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-        >
-          <motion.div 
-            className="d-inline-flex align-items-center gap-2 px-4 py-2 rounded-pill mb-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            style={{
-              border: '1px solid rgba(212, 175, 55, 0.3)',
-              backgroundColor: 'rgba(212, 175, 55, 0.1)',
-              backdropFilter: 'blur(10px)'
-            }}
-          >
-            <span className="text-uppercase fw-semibold" style={{ color: '#D4AF37', fontSize: '0.7rem', letterSpacing: '0.2em' }}>
-              Cabinet Performnces
-            </span>
-          </motion.div>
+  {/* Contenu Hero */}
+  <motion.div 
+    className="position-relative text-center px-4" 
+    style={{ zIndex: 10, maxWidth: '900px', paddingTop: '80px' }} 
+    initial={{ opacity: 0, y: 50 }} 
+    animate={{ opacity: 1, y: 0 }} 
+    transition={{ duration: 1 }}
+  >
+    <motion.div 
+      className="d-inline-flex align-items-center gap-2 px-4 py-2 rounded-pill mb-4"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 0.3 }}
+      style={{
+        border: '1px solid rgba(212, 175, 55, 0.3)',
+        backgroundColor: 'rgba(212, 175, 55, 0.1)',
+        backdropFilter: 'blur(10px)'
+      }}
+    >
+    </motion.div>
 
-          <h1 className="display-3 fw-bold text-white mb-4" style={{ lineHeight: '1.1' }}>
-            ASSISTANCES & <br />
-            <span 
-              style={{
-                background: 'linear-gradient(to right, white, white, #D4AF37)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text'
-              }}
-            >
-              CONSEILS
-            </span>
-          </h1>
+    <h4 className="display-3 fw-bold text-white mb-4" style={{ lineHeight: '1.1' }}>
+      EXCELLENCE OPÉRATIONNELLE <br />
+      <span 
+        style={{
+          background: 'linear-gradient(to right, white, white, #D4AF37)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          backgroundClip: 'text'
+        }}
+      >
+        ET PERFORMANCE DURABLE
+      </span>
+    </h4>
 
-          <p className="lead text-white-50 mb-5 mx-auto" style={{ maxWidth: '700px' }}>
-            Transformez votre organisation avec un accompagnement stratégique sur mesure, 
-            conçu pour les leaders visionnaires.
-          </p>
+    <p className="lead text-white-50 mb-5 mx-auto" style={{ maxWidth: '700px' }}>
+      Un accompagnement stratégique et opérationnel pour sécuriser votre croissance 
+      et optimiser vos performances.
+    </p>
 
-          <div className="d-flex flex-column flex-sm-row gap-3 justify-content-center">
-            <motion.a 
-              href="#contact"
-              className="btn btn-lg text-white fw-semibold d-inline-flex align-items-center justify-content-center gap-2 position-relative overflow-hidden"
-              style={{ backgroundColor: '#E0751A', boxShadow: '0 10px 30px rgba(224, 117, 26, 0.2)' }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <span className="position-relative">
-                Prendre rendez-vous <ArrowRight size={16} className="ms-2" />
-              </span>
-            </motion.a>
-            <a 
-              href="#methodology"
-              className="btn btn-lg fw-semibold"
-              style={{
-                border: '1px solid rgba(255, 255, 255, 0.2)',
-                color: 'white',
-                backgroundColor: 'transparent',
-                backdropFilter: 'blur(10px)'
-              }}
-            >
-              Demander un diagnostic
-            </a>
-          </div>
-        </motion.div>
+    <div className="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+      <motion.a 
+        href="#contact"
+        className="btn btn-lg text-white fw-semibold d-inline-flex align-items-center justify-content-center gap-2"
+        style={{ backgroundColor: '#E0751A', boxShadow: '0 10px 30px rgba(224, 117, 26, 0.2)' }}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        <span>Prendre rendez-vous <ArrowRight size={16} className="ms-2" /></span>
+      </motion.a>
+      <a 
+        href="#methodology"
+        className="btn btn-lg fw-semibold"
+        style={{
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          color: 'white',
+          backgroundColor: 'transparent',
+          backdropFilter: 'blur(10px)'
+        }}
+      >
+        Demander un diagnostic
+      </a>
+    </div>
+  </motion.div>
 
-        <motion.div 
-          className="position-absolute"
-          style={{ bottom: '40px', left: '50%', transform: 'translateX(-50%)', opacity: 0.5 }}
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-        >
-          <ChevronDown size={24} color="white" />
-        </motion.div>
-      </section>
+  {/* Indicateur de scroll */}
+  <motion.div 
+    className="position-absolute" 
+    style={{ bottom: '40px', left: '50%', transform: 'translateX(-50%)', opacity: 0.5 }}
+    animate={{ y: [0, 10, 0] }}
+    transition={{ duration: 2, repeat: Infinity }}
+  >
+    <ChevronDown size={24} color="white" />
+  </motion.div>
+</section>
 
       {/* Pillars Section */}
       <section className="py-5 position-relative" style={{ backgroundColor: '#0A1A2F' }}>
@@ -551,126 +688,26 @@ const AssistanceConseilsPage: React.FC = () => {
       </section>
 
       {/* Featured Offers */}
-      <section className="py-5" style={{ backgroundColor: '#0A1A2F' }}>
-        <div className="container py-5">
-          {offers.map((offer, index) => (
-            <div key={index} className={`row align-items-center g-5 ${index !== offers.length - 1 ? 'mb-5 pb-5' : ''}`}>
-              <div className={`col-lg-6 ${index % 2 === 1 ? 'order-lg-2' : ''}`}>
-                <RevealOnScroll>
-                  <motion.div 
-                    className="overflow-hidden rounded-4 position-relative"
-                    style={{ aspectRatio: '4/3' }}
-                    whileHover={{ scale: 1.02 }}
-                  >
-                    <div 
-                      className="position-absolute top-0 start-0 w-100 h-100 transition-all"
-                      style={{ backgroundColor: 'rgba(10, 26, 47, 0.2)', zIndex: 1 }}
-                    />
-                    <motion.img 
-                      src={offer.image}
-                      alt={offer.title}
-                      className="w-100 h-100 object-fit-cover"
-                      whileHover={{ scale: 1.1 }}
-                      transition={{ duration: 1.5 }}
-                    />
-                  </motion.div>
-                </RevealOnScroll>
-              </div>
+     {/* ========================================
+    SECTION: SERVICES
+    Utilise le composant ServiceCard pour chaque service
+    ======================================== */}
+<section className="py-5" style={{ backgroundColor: '#0A1A2F' }}>
+  <div className="container py-5">
+    <RevealOnScroll>
+      <div className="text-center mb-5">
+        <span className="text-uppercase fw-bold small" style={{ color: '#D4AF37', letterSpacing: '0.15em' }}>
+          Nos Services
+        </span>
+        <h2 className="display-6 fw-bold text-white mt-2">Excellence & Expertise</h2>
+      </div>
+    </RevealOnScroll>
 
-              <div className={`col-lg-6 ${index % 2 === 1 ? 'order-lg-1' : ''}`}>
-                <RevealOnScroll delay={0.1}>
-                  <div className="d-flex align-items-center gap-3 mb-4">
-                    <div style={{ color: '#E0751A' }}>
-                      {offer.icon}
-                    </div>
-                    <h3 className="fs-3 fw-bold text-white mb-0">{offer.title}</h3>
-                  </div>
-
-                  <p className="mb-4" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
-                    {offer.description}
-                  </p>
-
-                  <ul className="list-unstyled mb-4">
-                    {offer.features.map((feature, idx) => (
-                      <li key={idx} className="d-flex align-items-start gap-3 mb-3 small text-white-50">
-                        <CheckCircle size={20} className="flex-shrink-0" style={{ color: '#D4AF37' }} />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>               
-                </RevealOnScroll>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="py-5" style={{ background: 'linear-gradient(to bottom, #0A1A2F, #081526)' }}>
-        <div className="container py-5">
-          <RevealOnScroll>
-            <div className="text-center mb-5">
-              <h2 className="display-6 fw-bold text-white">La Confiance de nos Clients</h2>
-            </div>
-          </RevealOnScroll>
-
-          <div className="row g-4">
-            {testimonials.map((testimonial, index) => (
-              <div key={index} className="col-md-6 col-lg-4">
-                <RevealOnScroll delay={index * 0.1}>
-                  <motion.div 
-                    className="card h-100 border position-relative"
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: index * 0.1 }}
-                    whileHover={{ 
-                      y: testimonial.featured ? 0 : -5,
-                      borderColor: 'rgba(224, 117, 26, 0.3)'
-                    }}
-                    style={{
-                      backgroundColor: 'rgba(255, 255, 255, 0.03)',
-                      backdropFilter: 'blur(12px)',
-                      borderColor: testimonial.featured ? 'rgba(224, 117, 26, 0.3)' : 'rgba(255, 255, 255, 0.08)',
-                      borderRadius: '16px',
-                      ...(testimonial.featured && { marginTop: '-16px' })
-                    }}
-                  >
-                    <div className="position-absolute top-0 end-0 p-4">
-                      <Quote size={40} style={{ color: 'rgba(224, 117, 26, 0.2)' }} />
-                    </div>
-                    
-                    <div className="card-body p-4">
-                      <div className="d-flex align-items-center gap-3 mb-4">
-                        <img 
-                          src={testimonial.image}
-                          alt={testimonial.author}
-                          className="rounded-circle border"
-                          style={{ 
-                            width: '48px', 
-                            height: '48px', 
-                            borderColor: 'rgba(212, 175, 55, 0.5)',
-                            objectFit: 'cover'
-                          }}
-                        />
-                        <div>
-                          <div className="text-white fw-medium">{testimonial.author}</div>
-                          <div className="text-uppercase small fw-medium" style={{ color: '#E0751A', fontSize: '0.7rem' }}>
-                            {testimonial.company}
-                          </div>
-                        </div>
-                      </div>
-
-                      <p className="fst-italic small mb-0" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
-                        {testimonial.quote}
-                      </p>
-                    </div>
-                  </motion.div>
-                </RevealOnScroll>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+    {subServices.map((service, index) => (
+      <ServiceCard key={index} service={service} index={index} />
+    ))}
+  </div>
+</section>
 
       {/* CTA Final */}
       <section className="py-5 position-relative overflow-hidden" style={{ backgroundColor: '#0A1A2F' }}>
@@ -766,10 +803,11 @@ const AssistanceConseilsPage: React.FC = () => {
             <div className="col-md-6 col-lg-3">
               <h5 className="fw-semibold mb-4">Liens Rapides</h5>
               <ul className="list-unstyled small">
-                <li className="mb-2"><a href="#" className="text-white-50 text-decoration-none">Accueil</a></li>
-                <li className="mb-2"><a href="#services" className="text-white-50 text-decoration-none">Nos Formations</a></li>
-                <li className="mb-2"><a href="#audits" className="text-white-50 text-decoration-none">Études & Audits</a></li>
-                <li className="mb-2"><a href="#equipe" className="text-white-50 text-decoration-none">Notre Équipe</a></li>
+                <li className="mb-2"><a href="/" className="text-white-50 text-decoration-none">Accueil</a></li>
+                <li className="mb-2"><a href="/formations" className="text-white-50 text-decoration-none">Nos Formations</a></li>
+                <li className="mb-2"><a href="/assistances-conseils" className="text-white-50 text-decoration-none">Assistances & Conseils</a></li>
+                <li className="mb-2"><a href="/etudes-audits" className="text-white-50 text-decoration-none">Études & Audits</a></li>
+                <li className="mb-2"><a href="/recrutements" className="text-white-50 text-decoration-none">Recrutements</a></li>
                 <li className="mb-2"><a href="#contact" className="text-white-50 text-decoration-none">Contact</a></li>
               </ul>
             </div>

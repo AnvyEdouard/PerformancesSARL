@@ -8,6 +8,7 @@ import {
   ClipboardCheck, BarChart3
 } from 'lucide-react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Link } from 'react-router-dom';
 
 // Animation variants
 const fadeInUp = {
@@ -95,7 +96,7 @@ const HomePage: React.FC = () => {
   ];
 
   return (
-    <div style={{ backgroundColor: '#FAFAFA', color: '#2F475E', fontFamily: 'Inter, sans-serif' }}>
+     <div style={{ backgroundColor: '#FAFAFA', color: '#2F475E', fontFamily: 'Inter, sans-serif' }}>
       {/* Header */}
       <motion.header 
         initial={{ y: -100 }}
@@ -105,7 +106,7 @@ const HomePage: React.FC = () => {
       >
         <div className="container">
           <nav className="navbar navbar-expand-lg navbar-light py-3">
-            <a href="#" className="navbar-brand d-flex align-items-center gap-2">
+            <Link to="/" className="navbar-brand d-flex align-items-center gap-2">
               <div className="bg-dark text-white p-2 rounded" style={{ backgroundColor: '#0A1A2F' }}>
                 <span className="fw-bold fs-5">CP</span>
               </div>
@@ -113,7 +114,7 @@ const HomePage: React.FC = () => {
                 <span className="fw-bold" style={{ fontSize: '1.1rem', color: '#0A1A2F' }}>CABINET</span>
                 <span className="text-uppercase" style={{ fontSize: '0.7rem', color: '#E0751A', letterSpacing: '2px' }}>Performances</span>
               </div>
-            </a>
+            </Link>
 
             <button 
               className="navbar-toggler border-0" 
@@ -124,12 +125,36 @@ const HomePage: React.FC = () => {
 
             <div className={`collapse navbar-collapse ${isMenuOpen ? 'show' : ''}`}>
               <ul className="navbar-nav ms-auto gap-2">
-                <li className="nav-item"><a href="#" className="nav-link fw-medium" style={{ fontSize: '0.8rem' }}>ACCUEIL</a></li>
-                <li className="nav-item"><a href="#formations" className="nav-link fw-medium" style={{ fontSize: '0.8rem' }}>FORMATIONS</a></li>
-                <li className="nav-item"><a href="#assistances" className="nav-link fw-medium" style={{ fontSize: '0.8rem' }}>ASSISTANCES & CONSEILS</a></li>
-                <li className="nav-item"><a href="#audits" className="nav-link fw-medium" style={{ fontSize: '0.8rem' }}>ÉTUDES & AUDITS</a></li>
-                <li className="nav-item"><a href="#recrutement" className="nav-link fw-medium" style={{ fontSize: '0.8rem' }}>RECRUTEMENTS</a></li>
-                <li className="nav-item"><a href="#equipe" className="nav-link fw-medium" style={{ fontSize: '0.8rem' }}>À PROPOS</a></li>
+                <li className="nav-item">
+                  <Link to="/" className="nav-link fw-medium" style={{ fontSize: '0.8rem' }}>
+                    ACCUEIL
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/formations" className="nav-link fw-medium" style={{ fontSize: '0.8rem' }}>
+                    FORMATIONS
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/assistances-conseils" className="nav-link fw-medium" style={{ fontSize: '0.8rem' }}>
+                    ASSISTANCES & CONSEILS
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/etudes-audits" className="nav-link fw-medium" style={{ fontSize: '0.8rem' }}>
+                    ÉTUDES & AUDITS
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/recrutements" className="nav-link fw-medium" style={{ fontSize: '0.8rem' }}>
+                    RECRUTEMENTS
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/a-propos" className="nav-link fw-medium" style={{ fontSize: '0.8rem' }}>
+                    À PROPOS
+                  </Link>
+                </li>
               </ul>
               <a 
                 href="#contact" 
@@ -346,25 +371,25 @@ const HomePage: React.FC = () => {
           icon: <GraduationCap size={40} />, 
           title: 'Formations', 
           desc: "Formation diplômantes, qualifiantes et certificats axée sur la pratique et l'innovation",
-          link: '#formations' 
+          link: '/formations' 
         },
         { 
           icon: <Handshake size={40} />, 
           title: 'Assistances & Conseils', 
           desc: "Bénéficiez d'une expertise stratégique pour débloquer votre potentiel",
-          link: '#assistances' 
+          link: '/assistances-conseils' 
         },
         { 
           icon: <FileBarChart size={40} />, 
           title: 'Études & Audits', 
           desc: "Nos études de faisabilité et nos audits rigoureux vous fournissent une base solide pour la planification et l'investissement",
-          link: '#audits' 
+          link: '/etudes-audits' 
         },
         { 
           icon: <Users size={40} />, 
           title: 'Recrutement', 
           desc: 'À la recherche de votre nouveau/nouvelle collaborateur/collaboratrice ? Faites-nous confiance !',
-          link: '#recrutement' 
+          link: '/recrutements' 
         }
       ].map((domaine, index) => (
         <div key={index} className="col-md-6 col-lg-3 d-flex">
@@ -513,7 +538,7 @@ const HomePage: React.FC = () => {
                   </div>
 
                   <a 
-                    href="/assistances" 
+                    href="/assistances-conseils" 
                     className="btn rounded-pill text-white fw-medium"
                     style={{ backgroundColor: '#E0751A' }}
                   >
@@ -586,7 +611,7 @@ const HomePage: React.FC = () => {
                   </div>
 
                   <a 
-                    href="/audits" 
+                    href="/etudes-audits" 
                     className="btn rounded-pill text-white fw-medium"
                     style={{ backgroundColor: '#E0751A' }}
                   >
@@ -654,7 +679,7 @@ const HomePage: React.FC = () => {
     <RevealOnScroll>
       <div className="text-center mt-2">
         <a 
-          href="/recrutement" 
+          href="/recrutements" 
           className="btn btn-md rounded-pill text-white fw-medium px-5"
           style={{ backgroundColor: '#E0751A', fontSize: '0.9rem' }}
         >
