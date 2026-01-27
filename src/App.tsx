@@ -6,10 +6,14 @@ import EtudesAuditsPage from './composants/etudes-audits';
 import RecruitmentPage from './composants/recrutements';
 import AboutPage from './composants/a-propos';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import ScrollToTop from './ScrollToTop';
 
 function App() {
   return (
     <Router>
+      {/* Recharge les pages au tout début*/}
+      <ScrollToTop />
+
       <Routes>
         {/* Accueil */}
         <Route path="/" element={<HomePage />} />

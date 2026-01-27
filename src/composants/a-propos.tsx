@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Users, BarChart3, Monitor, Shield, Award, Target, 
   Flag, Globe, Download, Quote, Menu, ArrowRight,
@@ -56,78 +56,225 @@ const partners: Partner[] = [
 const AboutPage: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  // Pop up formulaire header
+  const [isContactOpen, setIsContactOpen] = useState(false);
+
   return (
-    <div style={{ backgroundColor: '#FAFAFA', color: '#2F475E', fontFamily: 'Inter, sans-serif' }}>
+    <div style={{ backgroundColor: '#FAFAFA', color: '#2F475E', fontFamily: 'Miguer Sans, sans-serif' }}>
           {/* Header */}
-          <motion.header 
-            initial={{ y: -100 }}
-            animate={{ y: 0 }}
-            className="fixed-top bg-white shadow-sm"
-            style={{ backdropFilter: 'blur(10px)', backgroundColor: 'rgba(255, 255, 255, 0.95)', zIndex: 1000 }}
-          >
-            <div className="container">
-              <nav className="navbar navbar-expand-lg navbar-light py-3">
-                <Link to="/" className="navbar-brand d-flex align-items-center gap-2">
-                  <div className="bg-dark text-white p-2 rounded" style={{ backgroundColor: '#0A1A2F' }}>
-                    <span className="fw-bold fs-5">CP</span>
-                  </div>
-                  <div className="d-flex flex-column lh-1">
-                    <span className="fw-bold" style={{ fontSize: '1.1rem', color: '#0A1A2F' }}>CABINET</span>
-                    <span className="text-uppercase" style={{ fontSize: '0.7rem', color: '#E0751A', letterSpacing: '2px' }}>Performances</span>
-                  </div>
-                </Link>
-    
-                <button 
-                  className="navbar-toggler border-0" 
-                  onClick={() => setIsMenuOpen(!isMenuOpen)}
+                <motion.header 
+                  initial={{ y: -100 }}
+                  animate={{ y: 0 }}
+                  className="fixed-top bg-white shadow-sm"
+                  style={{ 
+                    backdropFilter: 'blur(10px)', 
+                    backgroundColor: 'rgba(255, 255, 255, 0.95)', 
+                    zIndex: 1000 
+                  }}
                 >
-                  <Menu size={24} />
+                  <div className="container">
+                    <nav className="navbar navbar-expand-lg navbar-light py-2">
+                      {/* Remplacement par votre Logo Image */}
+                      <Link to="/" className="navbar-brand d-flex align-items-center">
+                        <img 
+                          src="https://i.ibb.co/7t7J2Cpk/logo2.png" 
+                          alt="Logo Performances" 
+                          style={{ 
+                            height: '50px', // Ajustez cette valeur selon vos préférences
+                            width: 'auto',
+                            display: 'block'
+                          }} 
+                        />
+                      </Link>
+          
+                      {/* Bouton Menu Mobile */}
+                      <button 
+                        className="navbar-toggler border-0" 
+                        onClick={() => setIsMenuOpen(!isMenuOpen)}
+                      >
+                        <Menu size={24} />
+                      </button>
+          
+                      {/* Menu de Navigation */}
+                      <div className={`collapse navbar-collapse ${isMenuOpen ? 'show' : ''}`}>
+                        <ul className="navbar-nav ms-auto gap-2">
+                          <li className="nav-item">
+                            <Link to="/" className="nav-link fw-medium" style={{ fontSize: '0.8rem' }}>
+                              ACCUEIL
+                            </Link>
+                          </li>
+                          <li className="nav-item">
+                            <Link to="/formations" className="nav-link fw-medium" style={{ fontSize: '0.8rem' }}>
+                              FORMATIONS
+                            </Link>
+                          </li>
+                          <li className="nav-item">
+                            <Link to="/assistances-conseils" className="nav-link fw-medium" style={{ fontSize: '0.8rem' }}>
+                              ASSISTANCE & CONSEIL
+                            </Link>
+                          </li>
+                          <li className="nav-item">
+                            <Link to="/etudes-audits" className="nav-link fw-medium" style={{ fontSize: '0.8rem' }}>
+                              ÉTUDES & AUDIT
+                            </Link>
+                          </li>
+                          <li className="nav-item">
+                            <Link to="/recrutements" className="nav-link fw-medium" style={{ fontSize: '0.8rem' }}>
+                              RECRUTEMENT
+                            </Link>
+                          </li>
+                          <li className="nav-item">
+                            <Link to="/a-propos" className="nav-link fw-medium" style={{ fontSize: '0.8rem' }}>
+                              À PROPOS
+                            </Link>
+                          </li>
+                        </ul>
+                        
+                        {/* Bouton Contact */}
+                        <button
+                onClick={() => setIsContactOpen(true)}
+                className="btn ms-lg-3 rounded-pill text-white fw-medium"
+                style={{ backgroundColor: '#31083F', padding: '10px 25px' }}
+                 >
+                Contactez-nous
                 </button>
-    
-                <div className={`collapse navbar-collapse ${isMenuOpen ? 'show' : ''}`}>
-                  <ul className="navbar-nav ms-auto gap-2">
-                    <li className="nav-item">
-                      <Link to="/" className="nav-link fw-medium" style={{ fontSize: '0.8rem' }}>
-                        ACCUEIL
-                      </Link>
-                    </li>
-                    <li className="nav-item">
-                      <Link to="/formations" className="nav-link fw-medium" style={{ fontSize: '0.8rem' }}>
-                        FORMATIONS
-                      </Link>
-                    </li>
-                    <li className="nav-item">
-                      <Link to="/assistances-conseils" className="nav-link fw-medium" style={{ fontSize: '0.8rem' }}>
-                        ASSISTANCES & CONSEILS
-                      </Link>
-                    </li>
-                    <li className="nav-item">
-                      <Link to="/etudes-audits" className="nav-link fw-medium" style={{ fontSize: '0.8rem' }}>
-                        ÉTUDES & AUDITS
-                      </Link>
-                    </li>
-                    <li className="nav-item">
-                      <Link to="/recrutements" className="nav-link fw-medium" style={{ fontSize: '0.8rem' }}>
-                        RECRUTEMENTS
-                      </Link>
-                    </li>
-                    <li className="nav-item">
-                      <Link to="/a-propos" className="nav-link fw-medium" style={{ fontSize: '0.8rem' }}>
-                        À PROPOS
-                      </Link>
-                    </li>
-                  </ul>
-                  <a 
-                    href="#contact" 
-                    className="btn ms-3 rounded-pill text-white fw-medium"
-                    style={{ backgroundColor: '#0A1A2F' }}
-                  >
-                    Contactez-nous
-                  </a>
-                </div>
-              </nav>
-            </div>
-          </motion.header>
+                      </div>
+                    </nav>
+                  </div>
+                </motion.header>
+
+                 <AnimatePresence>
+                  {isContactOpen && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 15 }}
+                      exit={{ opacity: 0 }}
+                      style={{
+                        position: "fixed",
+                        inset: 0,
+                        backgroundColor: "rgba(0,0,0,0.7)",
+                        zIndex: 2000,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        padding: "20px"
+                      }}
+                    >
+                      {/* Card popup */}
+                      <motion.div
+                        initial={{ y: 80, scale: 0.9 }}
+                        animate={{ y: 0, scale: 1 }}
+                        exit={{ y: 80, scale: 0.9 }}
+                        transition={{ duration: 0.35 }}
+                        className="rounded-5 p-4 p-md-5 text-white"
+                        style={{
+                          maxWidth: "700px",
+                          width: "100%",
+                          background: "rgba(49, 8, 63, 1)",
+                          backdropFilter: "blur(15px)",
+                          position: "relative"
+                        }}
+                      >
+                        {/* Bouton fermer */}
+                        <button
+                          onClick={() => setIsContactOpen(false)}
+                          style={{
+                            position: "absolute",
+                            top: 20,
+                            right: 25,
+                            background: "transparent",
+                            border: "none",
+                            color: "#fff",
+                            fontSize: "1.8rem",
+                            cursor: "pointer"
+                          }}
+                        >
+                          ×
+                        </button>
+                
+                        <h3 className="fw-bold mb-4 text-center">
+                          Contactez-nous
+                        </h3>
+                
+                        {/* ✅ TON FORMULAIRE */}
+                        <form className="bg-white bg-opacity-10 p-4 rounded-4">
+                          <div className="row g-3">
+                            <div className="col-md-6">
+                              <input
+                                type="text"
+                                className="form-control bg-white bg-opacity-10 border-0 text-white"
+                                placeholder="Nom *"
+                                style={{ backdropFilter: "blur(10px)" }}
+                              />
+                            </div>
+                
+                            <div className="col-md-6">
+                              <input
+                                type="text"
+                                className="form-control bg-white bg-opacity-10 border-0 text-white"
+                                placeholder="Prénom *"
+                                style={{ backdropFilter: "blur(10px)" }}
+                              />
+                            </div>
+                
+                            <div className="col-12">
+                              <input
+                                type="email"
+                                className="form-control bg-white bg-opacity-10 border-0 text-white"
+                                placeholder="Email *"
+                                style={{ backdropFilter: "blur(10px)" }}
+                              />
+                            </div>
+                
+                            <div className="col-12">
+                              <input
+                                type="text"
+                                className="form-control bg-white bg-opacity-10 border-0 text-white"
+                                placeholder="Entreprise *"
+                                style={{ backdropFilter: "blur(10px)" }}
+                              />
+                            </div>
+                
+                            <div className="col-12">
+                              <select
+                                className="form-select bg-white bg-opacity-10 border-0 text-white"
+                                style={{ backdropFilter: "blur(10px)" }}
+                              >
+                                <option className="text-dark">Sujet de votre demande *</option>
+                                <option className="text-dark">Formation</option>
+                                <option className="text-dark">Assistance & Conseil</option>
+                                <option className="text-dark">Étude & Audit</option>
+                                <option className="text-dark">Recrutement</option>
+                                <option className="text-dark">Autre</option>
+                              </select>
+                            </div>
+                
+                            <div className="col-12">
+                              <textarea
+                                rows={4}
+                                className="form-control bg-white bg-opacity-10 border-0 text-white"
+                                placeholder="Votre message *"
+                                style={{ backdropFilter: "blur(10px)" }}
+                              />
+                            </div>
+                
+                            <div className="col-12">
+                              <motion.button
+                                type="submit"
+                                className="btn btn-lg rounded-pill text-white fw-medium w-100"
+                                style={{ backgroundColor: "#FF6600", border: "none" }}
+                                whileHover={{ scale: 1.03 }}
+                                whileTap={{ scale: 0.97 }}
+                              >
+                                Envoyer le message
+                              </motion.button>
+                            </div>
+                          </div>
+                        </form>
+                      </motion.div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '120px 20px 60px' }}>
         {/* SECTION HERO */}
@@ -139,10 +286,10 @@ const AboutPage: React.FC = () => {
           transition={{ duration: 0.8 }}
         >
           <div>
-            <h2 style={{ fontWeight: 'bold', marginBottom: '24px', fontSize: '2.5rem', color: '#0A1A2F' }}>A Propos de nous</h2>
-            <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: '#2F475E' }}>
-              Depuis plus de 20 ans, nous accompagnons les organisations publiques et privées dans
-              leurs projets. Expertise certifiée (agréée FDFP), connaissance du contexte africain,
+            <h2 style={{ fontWeight: 'bold', marginBottom: '24px', fontSize: '2.5rem', color: '#FF6600' }}>A Propos de nous</h2>
+            <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: '#31083F' }}>
+              Depuis plus de 23 ans, nous accompagnons les organisations publiques et privées dans
+              leurs projets. Expertise certifiée (agrée FDFP), connaissance du contexte africain,
               approche orientée résultats et solutions sur-mesure sont nos mots-clés pour vous
               satisfaire.
             </p>
@@ -165,7 +312,7 @@ const AboutPage: React.FC = () => {
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.8 }}
         >
-          <h2 style={{ textAlign: 'center', fontWeight: 'bold', marginBottom: '60px', fontSize: '2.5rem', color: '#0A1A2F' }}>Notre équipe</h2>
+          <h2 style={{ textAlign: 'center', fontWeight: 'bold', marginBottom: '60px', fontSize: '2.5rem', color: '#31083F' }}>Notre équipe</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '40px', justifyItems: 'center' }}>
             {teamMembers.map((member, index) => (
               <motion.div
@@ -180,7 +327,7 @@ const AboutPage: React.FC = () => {
                   style={{ 
                     width: '150px', 
                     height: '150px',
-                    background: 'linear-gradient(to bottom, #87CEEB 0%, #87CEEB 50%, #90EE90 50%, #90EE90 100%)',
+                    background: 'linear-gradient(to bottom, #31083F 0%, #31083F 50%, #FF6600 50%, #FF6600 100%)',
                     borderRadius: '50%',
                     margin: '0 auto 20px',
                     display: 'flex',
@@ -215,8 +362,8 @@ const AboutPage: React.FC = () => {
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.8 }}
         >
-          <h2 style={{ fontWeight: 'bold', marginBottom: '60px', textAlign: 'center', fontSize: '2.5rem', color: '#0A1A2F' }}>Ils nous font confiance</h2>
-          <div style={{ backgroundColor: '#F5F5F5', padding: '60px 40px', borderRadius: '20px' }}>
+          <h2 style={{ fontWeight: 'bold', marginBottom: '60px', textAlign: 'center', fontSize: '2.5rem', color: '#31083F' }}>Ils nous font confiance</h2>
+          <div style={{ backgroundColor: '#ffffffff', padding: '60px 40px', borderRadius: '20px' }}>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '30px', justifyItems: 'center', alignItems: 'center' }}>
               {partners.map((partner, index) => (
                 <motion.div
@@ -271,90 +418,91 @@ const AboutPage: React.FC = () => {
       </div>
 
       {/* Footer */}
-      <footer id="contact" style={{ backgroundColor: '#0A1A2F', color: 'white', padding: '60px 0' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '40px', marginBottom: '40px' }}>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
-                <div style={{ backgroundColor: 'white', color: '#0A1A2F', padding: '8px 12px', borderRadius: '4px' }}>
-                  <span style={{ fontWeight: 'bold' }}>CP</span>
-                </div>
-                <span style={{ fontWeight: 'bold' }}>CABINET PERFORMANCES</span>
-              </div>
-              <p style={{ fontSize: '0.9rem', color: 'rgba(255, 255, 255, 0.7)', marginBottom: '20px' }}>
-                Partenaire de confiance pour le développement des compétences et la performance organisationnelle en Afrique de l'Ouest.
-              </p>
-              <div style={{ display: 'flex', gap: '12px' }}>
-                <a href="#" style={{ backgroundColor: '#2F475E', width: '36px', height: '36px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none', color: 'white' }}>
-                  <Linkedin size={16} />
-                </a>
-                <a href="#" style={{ backgroundColor: '#2F475E', width: '36px', height: '36px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none', color: 'white' }}>
-                  <Facebook size={16} />
-                </a>
-                <a href="#" style={{ backgroundColor: '#2F475E', width: '36px', height: '36px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none', color: 'white' }}>
-                  <MessageCircle size={16} />
-                </a>
-              </div>
-            </div>
-
-            <div>
-              <h5 style={{ fontWeight: '600', marginBottom: '20px' }}>Liens Rapides</h5>
-              <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: '0.9rem' }}>
-                <li style={{ marginBottom: '12px' }}><a href="/" style={{ color: 'rgba(255, 255, 255, 0.7)', textDecoration: 'none' }}>Accueil</a></li>
-                <li style={{ marginBottom: '12px' }}><a href="/formations" style={{ color: 'rgba(255, 255, 255, 0.7)', textDecoration: 'none' }}>Nos Formations</a></li>
-                <li style={{ marginBottom: '12px' }}><a href="/assistances-conseils" style={{ color: 'rgba(255, 255, 255, 0.7)', textDecoration: 'none' }}>Assistances & Conseils</a></li>
-                <li style={{ marginBottom: '12px' }}><a href="/etudes-audits" style={{ color: 'rgba(255, 255, 255, 0.7)', textDecoration: 'none' }}>Études & Audits</a></li>
-                <li style={{ marginBottom: '12px' }}><a href="/recrutements" style={{ color: 'rgba(255, 255, 255, 0.7)', textDecoration: 'none' }}>Recrutements</a></li>
-                <li style={{ marginBottom: '12px' }}><a href="#contact" style={{ color: 'rgba(255, 255, 255, 0.7)', textDecoration: 'none' }}>Contact</a></li>
-              </ul>
-            </div>
-
-            <div>
-              <h5 style={{ fontWeight: '600', marginBottom: '20px' }}>Contact</h5>
-              <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: '0.9rem', color: 'rgba(255, 255, 255, 0.7)' }}>
-                <li style={{ marginBottom: '16px', display: 'flex', gap: '12px' }}>
-                  <MapPin size={20} style={{ color: '#E0751A', flexShrink: 0 }} />
-                  <span>Cocody Cité Des Arts, Abidjan,<br />Côte d'Ivoire</span>
-                </li>
-                <li style={{ marginBottom: '16px', display: 'flex', gap: '12px' }}>
-                  <Phone size={20} style={{ color: '#E0751A', flexShrink: 0 }} />
-                  <span>+225 07 07 00 00 00</span>
-                </li>
-                <li style={{ marginBottom: '16px', display: 'flex', gap: '12px' }}>
-                  <Mail size={20} style={{ color: '#E0751A', flexShrink: 0 }} />
-                  <span>contact@cabinet-performances.com</span>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h5 style={{ fontWeight: '600', marginBottom: '20px' }}>Accréditations</h5>
-              <div style={{ marginBottom: '16px', padding: '16px', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.2)', backgroundColor: 'rgba(47, 71, 94, 0.3)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <Award size={32} style={{ color: '#E0751A' }} />
-                  <div>
-                    <p style={{ margin: 0, fontSize: '0.7rem', textTransform: 'uppercase', color: 'rgba(255, 255, 255, 0.7)' }}>Agrément</p>
-                    <p style={{ margin: 0, fontWeight: 'bold', fontSize: '0.9rem' }}>FDFP Certifié</p>
-                  </div>
-                </div>
-              </div>
-              <div style={{ padding: '16px', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.2)', backgroundColor: 'rgba(47, 71, 94, 0.3)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <CheckCircle size={32} style={{ color: '#E0751A' }} />
-                  <div>
-                    <p style={{ margin: 0, fontSize: '0.7rem', textTransform: 'uppercase', color: 'rgba(255, 255, 255, 0.7)' }}>Certificat</p>
-                    <p style={{ margin: 0, fontWeight: 'bold', fontSize: '0.9rem' }}>CDMP Partner</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.1)', paddingTop: '24px', textAlign: 'center' }}>
-            <p style={{ margin: 0, fontSize: '0.9rem', color: 'rgba(255, 255, 255, 0.7)' }}>© 2025 Cabinet Performances. Tous droits réservés. Mentions Légales.</p>
-          </div>
-        </div>
-      </footer>
+   <footer id="contact" className="py-5 text-white" style={{ backgroundColor: '#31083F' }}>
+     <div className="container py-4">
+       <div className="row g-5 mb-5">
+         <div className="col-md-6 col-lg-3">
+           <div className="d-flex align-items-center gap-2 mb-4">
+             <img 
+                src="https://i.ibb.co/NdkrxWnk/logo4.png" 
+                alt="CP Cabinet Performances" 
+                style={{ height: '50px', width: 'auto', objectFit: 'contain' }} 
+              />
+           </div>
+           <p className="small text-white-50 mb-4">
+             Partenaire de confiance pour le développement des compétences et la performance organisationnelle en Afrique de l'Ouest.
+           </p>
+           <div className="d-flex gap-3">
+             <a href="#" className="btn btn-sm rounded-circle d-flex align-items-center justify-content-center" style={{ backgroundColor: '#FF6600', width: '32px', height: '32px', color: 'white' }}>
+               <Linkedin size={16} />
+             </a>
+             <a href="#" className="btn btn-sm rounded-circle d-flex align-items-center justify-content-center" style={{ backgroundColor: '#FF6600', width: '32px', height: '32px', color: 'white' }}>
+               <Facebook size={16} />
+             </a>
+             <a href="#" className="btn btn-sm rounded-circle d-flex align-items-center justify-content-center" style={{ backgroundColor: '#FF6600', width: '32px', height: '32px', color: 'white' }}>
+               <MessageCircle size={16} />
+             </a>
+           </div>
+         </div>
+   
+         <div className="col-md-6 col-lg-3">
+           <h5 className="fw-semibold mb-4">Liens Rapides</h5>
+           <ul className="list-unstyled small">
+             <li className="mb-2"><a href="/" className="text-white-50 text-decoration-none">Accueil</a></li>
+             <li className="mb-2"><a href="/formations" className="text-white-50 text-decoration-none">Nos Formations</a></li>
+             <li className="mb-2"><a href="/assistances-conseils" className="text-white-50 text-decoration-none">Assistances & Conseils</a></li>
+             <li className="mb-2"><a href="/etudes-audits" className="text-white-50 text-decoration-none">Études & Audits</a></li>
+             <li className="mb-2"><a href="/recrutements" className="text-white-50 text-decoration-none">Recrutements</a></li>
+             <li className="mb-2"><a href="#contact" className="text-white-50 text-decoration-none">Contact</a></li>
+           </ul>
+         </div>
+   
+         <div className="col-md-6 col-lg-3">
+           <h5 className="fw-semibold mb-4">Contact</h5>
+           <ul className="list-unstyled small text-white-50">
+             <li className="mb-3 d-flex gap-3">
+               <MapPin size={20} style={{ color: '#FF6600' }} className="flex-shrink-0" />
+               <span>Cocody Cité Des Arts, Abidjan,<br />Côte d'Ivoire</span>
+             </li>
+             <li className="mb-3 d-flex gap-3">
+               <Phone size={20} style={{ color: '#FF6600' }} className="flex-shrink-0" />
+               <span>+225 07 07 00 00 00</span>
+             </li>
+             <li className="mb-3 d-flex gap-3">
+               <Mail size={20} style={{ color: '#FF6600' }} className="flex-shrink-0" />
+               <span>contact@cabinet-performances.com</span>
+             </li>
+           </ul>
+         </div>
+   
+         <div className="col-md-6 col-lg-3">
+           <h5 className="fw-semibold mb-4">Accréditations</h5>
+           <div className="mb-3 p-3 rounded border border-white border-opacity-25" style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}>
+             <div className="d-flex align-items-center gap-3">
+               <Award size={32} style={{ color: '#FF6600' }} />
+               <div>
+                 <p className="mb-0 small text-uppercase text-white-50" style={{ fontSize: '0.7rem' }}>Agrément</p>
+                 <p className="mb-0 fw-bold small text-white">FDFP Certifié</p>
+               </div>
+             </div>
+           </div>
+           <div className="p-3 rounded border border-white border-opacity-25" style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}>
+             <div className="d-flex align-items-center gap-3">
+               <CheckCircle size={32} style={{ color: '#FF6600' }} />
+               <div>
+                 <p className="mb-0 small text-uppercase text-white-50" style={{ fontSize: '0.7rem' }}>Certificat</p>
+                 <p className="mb-0 fw-bold small text-white">CDMP Partner</p>
+               </div>
+             </div>
+           </div>
+         </div>
+       </div>
+   
+       <div className="border-top pt-4 text-center" style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}>
+         <p className="mb-0 small text-white-50">© 2025 Cabinet Performances. Tous droits réservés. Mentions Légales.</p>
+       </div>
+     </div>
+   </footer>
     </div>
   );
 };
