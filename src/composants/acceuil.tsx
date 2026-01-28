@@ -10,11 +10,15 @@ import {
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from 'react-router-dom';
 
+
 // Animation variants
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.8 } }
 };
+
+// Envoi de mail des formulaires
+
 
 const RevealOnScroll: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const ref = React.useRef(null);
@@ -300,10 +304,15 @@ useEffect(() => {
         </h3>
 
         {/* ✅ TON FORMULAIRE */}
-        <form className="bg-white bg-opacity-10 p-4 rounded-4">
+        <form 
+           action="https://formspree.io/f/mwvogplo"
+           method="POST"
+          className="bg-white bg-opacity-10 p-4 rounded-4"
+          >
           <div className="row g-3">
             <div className="col-md-6">
               <input
+                name="nom"
                 type="text"
                 className="form-control bg-white bg-opacity-10 border-0 text-white"
                 placeholder="Nom *"
@@ -313,6 +322,7 @@ useEffect(() => {
 
             <div className="col-md-6">
               <input
+                name="prenom"
                 type="text"
                 className="form-control bg-white bg-opacity-10 border-0 text-white"
                 placeholder="Prénom *"
@@ -322,6 +332,7 @@ useEffect(() => {
 
             <div className="col-12">
               <input
+                name="email"
                 type="email"
                 className="form-control bg-white bg-opacity-10 border-0 text-white"
                 placeholder="Email *"
@@ -331,6 +342,7 @@ useEffect(() => {
 
             <div className="col-12">
               <input
+                name="entreprise"
                 type="text"
                 className="form-control bg-white bg-opacity-10 border-0 text-white"
                 placeholder="Entreprise *"
@@ -340,6 +352,7 @@ useEffect(() => {
 
             <div className="col-12">
               <select
+                name="sujet"
                 className="form-select bg-white bg-opacity-10 border-0 text-white"
                 style={{ backdropFilter: "blur(10px)" }}
               >
@@ -354,6 +367,7 @@ useEffect(() => {
 
             <div className="col-12">
               <textarea
+                name="message"
                 rows={4}
                 className="form-control bg-white bg-opacity-10 border-0 text-white"
                 placeholder="Votre message *"
@@ -521,16 +535,23 @@ useEffect(() => {
             Notre promesse : vous apporter des solutions fiables, adaptées à vos enjeux et orientées résultats.
           </p>
           <p className="text-muted mb-4">
-            Nos valeurs <br></br>
-            <b>Excellence</b> <br></br>
-            Nous visons le meilleur, dans chaque détail et à chaque étape.
-            <b> Performance</b> <br></br>
-            Aller plus loin, plus vite mais toujours avec un niveau d’exigence constant.
-            <b> Vision africaine</b><br></br>
-            Nous valorisons les talents et la culture du continent. <br></br>
-            <b>Avant-gardisme</b> <br></br>
-            Penser différemment pour ouvrir la voie à de nouvelles possibilités.
-          </p>
+      <b>Nos valeurs</b><br />
+  <br />
+
+  <b className="badge rounded-pill" style={{ backgroundColor: '#FF6600', color: 'white', padding: '5px 10px', marginBottom: '8px' }}>
+    Excellence
+  </b> <br />
+
+  <b className="badge rounded-pill" style={{ backgroundColor: '#671265', color: 'white', padding: '5px 10px', marginBottom: '8px' }}>
+    Performance
+  </b> <br />
+  <b className="badge rounded-pill" style={{ backgroundColor: '#FF6600', color: 'white', padding: '5px 10px', marginBottom: '8px' }}>
+    Vision africaine
+  </b> <br />
+  <b className="badge rounded-pill" style={{ backgroundColor: '#671265', color: 'white', padding: '5px 10px', marginBottom: '8px' }}>
+    Avant-gardisme
+  </b> <br />
+</p>
         </RevealOnScroll>
       </div>
       <div className="col-lg-6">
@@ -1203,10 +1224,15 @@ useEffect(() => {
       {/* Colonne Gauche - Formulaire de contact */}
       <div className="col-lg-6">
         <h4 className="fw-bold mb-4">Contactez-nous</h4>
-        <form className="bg-white bg-opacity-10 p-4 rounded-4">
+         <form 
+           action="https://formspree.io/f/mwvogplo"
+           method="POST"
+          className="bg-white bg-opacity-10 p-4 rounded-4"
+          >
           <div className="row g-3">
             <div className="col-md-6">
               <input 
+                name="nom"
                 type="text" 
                 className="form-control bg-white bg-opacity-10 border-0 text-white" 
                 placeholder="Nom *"
@@ -1215,6 +1241,7 @@ useEffect(() => {
             </div>
             <div className="col-md-6">
               <input 
+                name="prenom"
                 type="text" 
                 className="form-control bg-white bg-opacity-10 border-0 text-white" 
                 placeholder="Prénom *"
@@ -1223,6 +1250,7 @@ useEffect(() => {
             </div>
             <div className="col-12">
               <input 
+                name="emil"
                 type="email" 
                 className="form-control bg-white bg-opacity-10 border-0 text-white" 
                 placeholder="Email *"
@@ -1231,6 +1259,7 @@ useEffect(() => {
             </div>
             <div className="col-12">
               <input 
+                name="entreprise"
                 type="tel" 
                 className="form-control bg-white bg-opacity-10 border-0 text-white" 
                 placeholder="Entreprise *"
@@ -1239,6 +1268,7 @@ useEffect(() => {
             </div>
             <div className="col-12">
               <select 
+                name="sujet"
                 className="form-select bg-white bg-opacity-10 border-0 text-white" 
                 style={{ backdropFilter: 'blur(10px)' }}
               >
@@ -1252,6 +1282,7 @@ useEffect(() => {
             </div>
             <div className="col-12">
               <textarea 
+                name="message"
                 className="form-control bg-white bg-opacity-10 border-0 text-white" 
                 rows={4} 
                 placeholder="Votre message *"
@@ -1310,7 +1341,7 @@ useEffect(() => {
                 <Mail size={24} style={{ color: '#FF6600' }} className="flex-shrink-0" />
                 <div>
                   <p className="mb-0 fw-medium text-white">Email</p>
-                  <span>contact@cabinet-performances.com</span>
+                  <span>info@cabinetperformances.com</span>
                 </div>
               </li>
             </ul>

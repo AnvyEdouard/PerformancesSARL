@@ -234,10 +234,15 @@ const menuVariants: Variants = {
                         </h3>
                 
                         {/* ✅ TON FORMULAIRE */}
-                        <form className="bg-white bg-opacity-10 p-4 rounded-4">
+                        <form 
+                           action="https://formspree.io/f/mwvogplo"
+                           method="POST"
+                          className="bg-white bg-opacity-10 p-4 rounded-4"
+                          >
                           <div className="row g-3">
                             <div className="col-md-6">
                               <input
+                                name="nom"
                                 type="text"
                                 className="form-control bg-white bg-opacity-10 border-0 text-white"
                                 placeholder="Nom *"
@@ -247,6 +252,7 @@ const menuVariants: Variants = {
                 
                             <div className="col-md-6">
                               <input
+                                name="prenom"
                                 type="text"
                                 className="form-control bg-white bg-opacity-10 border-0 text-white"
                                 placeholder="Prénom *"
@@ -256,6 +262,7 @@ const menuVariants: Variants = {
                 
                             <div className="col-12">
                               <input
+                                name="email"
                                 type="email"
                                 className="form-control bg-white bg-opacity-10 border-0 text-white"
                                 placeholder="Email *"
@@ -265,6 +272,7 @@ const menuVariants: Variants = {
                 
                             <div className="col-12">
                               <input
+                                name="entreprise"
                                 type="text"
                                 className="form-control bg-white bg-opacity-10 border-0 text-white"
                                 placeholder="Entreprise *"
@@ -274,6 +282,7 @@ const menuVariants: Variants = {
                 
                             <div className="col-12">
                               <select
+                                name="sujet"
                                 className="form-select bg-white bg-opacity-10 border-0 text-white"
                                 style={{ backdropFilter: "blur(10px)" }}
                               >
@@ -288,6 +297,7 @@ const menuVariants: Variants = {
                 
                             <div className="col-12">
                               <textarea
+                                name="message"
                                 rows={4}
                                 className="form-control bg-white bg-opacity-10 border-0 text-white"
                                 placeholder="Votre message *"
@@ -632,7 +642,7 @@ const menuVariants: Variants = {
                      </li>
                      <li className="mb-3 d-flex gap-3">
                        <Mail size={20} style={{ color: '#FF6600' }} className="flex-shrink-0" />
-                       <span>contact@cabinet-performances.com</span>
+                       <span>info@cabinetperformances.com</span>
                      </li>
                    </ul>
                  </div>

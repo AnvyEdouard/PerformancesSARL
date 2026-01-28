@@ -591,137 +591,147 @@ useEffect(() => {
                 </motion.header>
 
                 <AnimatePresence>
-                  {isContactOpen && (
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 15 }}
-                      exit={{ opacity: 0 }}
-                      style={{
-                        position: "fixed",
-                        inset: 0,
-                        backgroundColor: "rgba(0,0,0,0.7)",
-                        zIndex: 2000,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        padding: "20px"
-                      }}
-                    >
-                      {/* Card popup */}
-                      <motion.div
-                        initial={{ y: 80, scale: 0.9 }}
-                        animate={{ y: 0, scale: 1 }}
-                        exit={{ y: 80, scale: 0.9 }}
-                        transition={{ duration: 0.35 }}
-                        className="rounded-5 p-4 p-md-5 text-white"
-                        style={{
-                          maxWidth: "700px",
-                          width: "100%",
-                          background: "rgba(49, 8, 63, 1)",
-                          backdropFilter: "blur(15px)",
-                          position: "relative"
-                        }}
-                      >
-                        {/* Bouton fermer */}
-                        <button
-                          onClick={() => setIsContactOpen(false)}
-                          style={{
-                            position: "absolute",
-                            top: 20,
-                            right: 25,
-                            background: "transparent",
-                            border: "none",
-                            color: "#fff",
-                            fontSize: "1.8rem",
-                            cursor: "pointer"
-                          }}
-                        >
-                          ×
-                        </button>
-                
-                        <h3 className="fw-bold mb-4 text-center">
-                          Contactez-nous
-                        </h3>
-                
-                        {/* ✅ TON FORMULAIRE */}
-                        <form className="bg-white bg-opacity-10 p-4 rounded-4">
-                          <div className="row g-3">
-                            <div className="col-md-6">
-                              <input
-                                type="text"
-                                className="form-control bg-white bg-opacity-10 border-0 text-white"
-                                placeholder="Nom *"
-                                style={{ backdropFilter: "blur(10px)" }}
-                              />
-                            </div>
-                
-                            <div className="col-md-6">
-                              <input
-                                type="text"
-                                className="form-control bg-white bg-opacity-10 border-0 text-white"
-                                placeholder="Prénom *"
-                                style={{ backdropFilter: "blur(10px)" }}
-                              />
-                            </div>
-                
-                            <div className="col-12">
-                              <input
-                                type="email"
-                                className="form-control bg-white bg-opacity-10 border-0 text-white"
-                                placeholder="Email *"
-                                style={{ backdropFilter: "blur(10px)" }}
-                              />
-                            </div>
-                
-                            <div className="col-12">
-                              <input
-                                type="text"
-                                className="form-control bg-white bg-opacity-10 border-0 text-white"
-                                placeholder="Entreprise *"
-                                style={{ backdropFilter: "blur(10px)" }}
-                              />
-                            </div>
-                
-                            <div className="col-12">
-                              <select
-                                className="form-select bg-white bg-opacity-10 border-0 text-white"
-                                style={{ backdropFilter: "blur(10px)" }}
-                              >
-                                <option className="text-dark">Sujet de votre demande *</option>
-                                <option className="text-dark">Formation</option>
-                                <option className="text-dark">Assistance & Conseil</option>
-                                <option className="text-dark">Étude & Audit</option>
-                                <option className="text-dark">Recrutement</option>
-                                <option className="text-dark">Autre</option>
-                              </select>
-                            </div>
-                
-                            <div className="col-12">
-                              <textarea
-                                rows={4}
-                                className="form-control bg-white bg-opacity-10 border-0 text-white"
-                                placeholder="Votre message *"
-                                style={{ backdropFilter: "blur(10px)" }}
-                              />
-                            </div>
-                
-                            <div className="col-12">
-                              <motion.button
-                                type="submit"
-                                className="btn btn-lg rounded-pill text-white fw-medium w-100"
-                                style={{ backgroundColor: "#FF6600", border: "none" }}
-                                whileHover={{ scale: 1.03 }}
-                                whileTap={{ scale: 0.97 }}
-                              >
-                                Envoyer le message
-                              </motion.button>
-                            </div>
-                          </div>
-                        </form>
-                      </motion.div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                 {isContactOpen && (
+                   <motion.div
+                     initial={{ opacity: 0 }}
+                     animate={{ opacity: 15 }}
+                     exit={{ opacity: 0 }}
+                     style={{
+                       position: "fixed",
+                       inset: 0,
+                       backgroundColor: "rgba(0,0,0,0.7)",
+                       zIndex: 2000,
+                       display: "flex",
+                       alignItems: "center",
+                       justifyContent: "center",
+                       padding: "20px"
+                     }}
+                   >
+                     {/* Card popup */}
+                     <motion.div
+                       initial={{ y: 80, scale: 0.9 }}
+                       animate={{ y: 0, scale: 1 }}
+                       exit={{ y: 80, scale: 0.9 }}
+                       transition={{ duration: 0.35 }}
+                       className="rounded-5 p-4 p-md-5 text-white"
+                       style={{
+                         maxWidth: "700px",
+                         width: "100%",
+                         background: "rgba(49, 8, 63, 1)",
+                         backdropFilter: "blur(15px)",
+                         position: "relative"
+                       }}
+                     >
+                       {/* Bouton fermer */}
+                       <button
+                         onClick={() => setIsContactOpen(false)}
+                         style={{
+                           position: "absolute",
+                           top: 20,
+                           right: 25,
+                           background: "transparent",
+                           border: "none",
+                           color: "#fff",
+                           fontSize: "1.8rem",
+                           cursor: "pointer"
+                         }}
+                       >
+                         ×
+                       </button>
+               
+                       <h3 className="fw-bold mb-4 text-center">
+                         Contactez-nous
+                       </h3>
+               
+                       {/* ✅ TON FORMULAIRE */}
+                       <form 
+                          action="https://formspree.io/f/mwvogplo"
+                          method="POST"
+                         className="bg-white bg-opacity-10 p-4 rounded-4"
+                         >
+                         <div className="row g-3">
+                           <div className="col-md-6">
+                             <input
+                               name="nom"
+                               type="text"
+                               className="form-control bg-white bg-opacity-10 border-0 text-white"
+                               placeholder="Nom *"
+                               style={{ backdropFilter: "blur(10px)" }}
+                             />
+                           </div>
+               
+                           <div className="col-md-6">
+                             <input
+                               name="prenom"
+                               type="text"
+                               className="form-control bg-white bg-opacity-10 border-0 text-white"
+                               placeholder="Prénom *"
+                               style={{ backdropFilter: "blur(10px)" }}
+                             />
+                           </div>
+               
+                           <div className="col-12">
+                             <input
+                               name="email"
+                               type="email"
+                               className="form-control bg-white bg-opacity-10 border-0 text-white"
+                               placeholder="Email *"
+                               style={{ backdropFilter: "blur(10px)" }}
+                             />
+                           </div>
+               
+                           <div className="col-12">
+                             <input
+                               name="entreprise"
+                               type="text"
+                               className="form-control bg-white bg-opacity-10 border-0 text-white"
+                               placeholder="Entreprise *"
+                               style={{ backdropFilter: "blur(10px)" }}
+                             />
+                           </div>
+               
+                           <div className="col-12">
+                             <select
+                               name="sujet"
+                               className="form-select bg-white bg-opacity-10 border-0 text-white"
+                               style={{ backdropFilter: "blur(10px)" }}
+                             >
+                               <option className="text-dark">Sujet de votre demande *</option>
+                               <option className="text-dark">Formation</option>
+                               <option className="text-dark">Assistance & Conseil</option>
+                               <option className="text-dark">Étude & Audit</option>
+                               <option className="text-dark">Recrutement</option>
+                               <option className="text-dark">Autre</option>
+                             </select>
+                           </div>
+               
+                           <div className="col-12">
+                             <textarea
+                               name="message"
+                               rows={4}
+                               className="form-control bg-white bg-opacity-10 border-0 text-white"
+                               placeholder="Votre message *"
+                               style={{ backdropFilter: "blur(10px)" }}
+                             />
+                           </div>
+               
+                           <div className="col-12">
+                             <motion.button
+                               type="submit"
+                               className="btn btn-lg rounded-pill text-white fw-medium w-100"
+                               style={{ backgroundColor: "#FF6600", border: "none" }}
+                               whileHover={{ scale: 1.03 }}
+                               whileTap={{ scale: 0.97 }}
+                             >
+                               Envoyer le message
+                             </motion.button>
+                           </div>
+                         </div>
+                       </form>
+                     </motion.div>
+                   </motion.div>
+                 )}
+               </AnimatePresence>
                 
 
    {/* Hero Section - Professional Layout */}
@@ -1461,7 +1471,7 @@ useEffect(() => {
           </li>
           <li className="mb-3 d-flex gap-3">
             <Mail size={20} style={{ color: '#FF6600' }} className="flex-shrink-0" />
-            <span>contact@cabinet-performances.com</span>
+            <span>info@cabinetperformances.com</span>
           </li>
         </ul>
       </div>
