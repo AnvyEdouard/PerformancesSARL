@@ -1006,6 +1006,8 @@ useEffect(() => {
       </div>
     </RevealOnScroll>
 
+    
+
     <div className="row row-cols-1 row-cols-lg-2 g-3">
       {FORMATIONS_DATA.map((domain, domainIndex) => (
         <div key={domainIndex} className="col">
@@ -1119,20 +1121,43 @@ useEffect(() => {
                                     </div>
                                   </motion.div>
                                 )}
-                              </AnimatePresence>
+                              </AnimatePresence>                        
                             </div>
                           );
                         })}
+                        
                       </div>
                     </div>
                   </motion.div>
                 )}
               </AnimatePresence>
             </div>
-          </RevealOnScroll>
+          </RevealOnScroll>          
         </div>
       ))}
     </div>
+    
+    <br></br>
+      <RevealOnScroll>
+      <div className="text-center mb-4">
+        <p className="text-muted mb-3">
+          Explorez notre catalogue détaillé avec toutes les références et thématiques
+        </p>
+        <Link 
+          to="/catalogue-de-formations"
+          className="btn btn-lg fw-semibold text-white d-inline-flex align-items-center gap-2 shadow-sm"
+          style={{ 
+            backgroundColor: '#671265',
+            border: 'none',
+            padding: '12px 30px',
+            borderRadius: '10px'
+          }}
+        >
+          📚 Consulter le Catalogue Complet
+          <ArrowRight size={20} />
+        </Link>
+      </div>
+    </RevealOnScroll>
   </div>
 </section>
 

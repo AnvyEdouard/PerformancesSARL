@@ -540,14 +540,15 @@ useEffect(() => {
 
   <b className="badge rounded-pill" style={{ backgroundColor: '#FF6600', color: 'white', padding: '5px 10px', marginBottom: '8px' }}>
     Excellence
-  </b> <br />
-
+  </b> 
+&ensp;&ensp;
   <b className="badge rounded-pill" style={{ backgroundColor: '#671265', color: 'white', padding: '5px 10px', marginBottom: '8px' }}>
     Performance
   </b> <br />
   <b className="badge rounded-pill" style={{ backgroundColor: '#FF6600', color: 'white', padding: '5px 10px', marginBottom: '8px' }}>
     Vision africaine
-  </b> <br />
+  </b> 
+  &ensp;&ensp;
   <b className="badge rounded-pill" style={{ backgroundColor: '#671265', color: 'white', padding: '5px 10px', marginBottom: '8px' }}>
     Avant-gardisme
   </b> <br />
@@ -722,7 +723,7 @@ useEffect(() => {
 <section 
   className="position-relative overflow-hidden w-100"
   style={{ 
-    height: '82vh',
+    height: '75vh',
     maxHeight: '100vh',
     fontFamily: 'Miguer Sans, sans-serif'
   }}

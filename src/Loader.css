@@ -1,0 +1,67 @@
+.loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px; /* espace entre le logo et le pourcentage */
+}
+
+.loader-logo {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  /* Pause de 0.6s puis rotation continue */
+  animation: initialPause 0.6s ease-in-out forwards,
+             continuousRotate 1.5s linear 0.6s infinite;
+}
+
+/* Animation de pause initiale - le logo reste fixe */
+@keyframes initialPause {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+}
+
+/* Animation de rotation continue après la pause */
+@keyframes continuousRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Style du pourcentage */
+.loader-percentage {
+  font-size: 30px;
+  font-weight: bold;
+  color: #2d1b69; /* couleur violet foncé du logo */
+  font-family: 'Miguer Sans', sans-serif;
+}
+
+/* Animation de fade out pour une transition douce */
+.loader-overlay.fade-out {
+  animation: fadeOut 0.3s ease-out forwards;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
